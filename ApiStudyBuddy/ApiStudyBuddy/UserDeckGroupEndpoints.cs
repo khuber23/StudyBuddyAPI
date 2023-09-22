@@ -3,6 +3,13 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using System.Linq;
+
+
+
 namespace ApiStudyBuddy;
 
 public static class UserDeckGroupEndpoints
@@ -27,6 +34,17 @@ public static class UserDeckGroupEndpoints
                     : TypedResults.NotFound();
         })
         .WithName("GetUserDeckGroupById")
+        .WithOpenApi();
+
+        group.MapGet("/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups.AsNoTracking()
+            .Include(model => model.User)
+            .Include(model => model.DeckGroup)
+             .Where(model => model.UserId == userid)
+             .ToListAsync();
+        })
+        .WithName("GetUserDeckGroupByUserId")
         .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckgroupid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
