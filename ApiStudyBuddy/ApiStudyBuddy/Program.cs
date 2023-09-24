@@ -2,11 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ApiStudyBuddy.Data;
 using ApiStudyBuddy;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApiStudyBuddyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApiStudyBuddyContext") ?? throw new InvalidOperationException("Connection string 'ApiStudyBuddyContext' not found.")));
 
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(opt =>
+{
+    opt.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
