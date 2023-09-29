@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiStudyBuddy.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_Tables_Initial_Create : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,8 +61,8 @@ namespace ApiStudyBuddy.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -76,7 +76,8 @@ namespace ApiStudyBuddy.Migrations
                 name: "DeckGroupDecks",
                 columns: table => new
                 {
-                    DeckGroupDeckId = table.Column<int>(type: "int", nullable: false),
+                    DeckGroupDeckId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     DeckGroupId = table.Column<int>(type: "int", nullable: false),
                     DeckId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -84,14 +85,14 @@ namespace ApiStudyBuddy.Migrations
                 {
                     table.PrimaryKey("PK_DeckGroupDecks", x => x.DeckGroupDeckId);
                     table.ForeignKey(
-                        name: "FK_DeckGroupDecks_DeckGroups_DeckGroupDeckId",
-                        column: x => x.DeckGroupDeckId,
+                        name: "FK_DeckGroupDecks_DeckGroups_DeckGroupId",
+                        column: x => x.DeckGroupId,
                         principalTable: "DeckGroups",
                         principalColumn: "DeckGroupId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DeckGroupDecks_Decks_DeckGroupDeckId",
-                        column: x => x.DeckGroupDeckId,
+                        name: "FK_DeckGroupDecks_Decks_DeckId",
+                        column: x => x.DeckId,
                         principalTable: "Decks",
                         principalColumn: "DeckId",
                         onDelete: ReferentialAction.Cascade);
@@ -101,7 +102,8 @@ namespace ApiStudyBuddy.Migrations
                 name: "DeckFlashCards",
                 columns: table => new
                 {
-                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false),
+                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     DeckId = table.Column<int>(type: "int", nullable: false),
                     FlashCardId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -109,14 +111,14 @@ namespace ApiStudyBuddy.Migrations
                 {
                     table.PrimaryKey("PK_DeckFlashCards", x => x.DeckFlashCardId);
                     table.ForeignKey(
-                        name: "FK_DeckFlashCards_Decks_DeckFlashCardId",
-                        column: x => x.DeckFlashCardId,
+                        name: "FK_DeckFlashCards_Decks_DeckId",
+                        column: x => x.DeckId,
                         principalTable: "Decks",
                         principalColumn: "DeckId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DeckFlashCards_FlashCards_DeckFlashCardId",
-                        column: x => x.DeckFlashCardId,
+                        name: "FK_DeckFlashCards_FlashCards_FlashCardId",
+                        column: x => x.FlashCardId,
                         principalTable: "FlashCards",
                         principalColumn: "FlashCardId",
                         onDelete: ReferentialAction.Cascade);
@@ -126,7 +128,8 @@ namespace ApiStudyBuddy.Migrations
                 name: "StudySessions",
                 columns: table => new
                 {
-                    StudySessionId = table.Column<int>(type: "int", nullable: false),
+                    StudySessionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeckGroupId = table.Column<int>(type: "int", nullable: false),
@@ -137,14 +140,14 @@ namespace ApiStudyBuddy.Migrations
                 {
                     table.PrimaryKey("PK_StudySessions", x => x.StudySessionId);
                     table.ForeignKey(
-                        name: "FK_StudySessions_DeckGroups_StudySessionId",
-                        column: x => x.StudySessionId,
+                        name: "FK_StudySessions_DeckGroups_DeckGroupId",
+                        column: x => x.DeckGroupId,
                         principalTable: "DeckGroups",
                         principalColumn: "DeckGroupId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudySessions_Decks_StudySessionId",
-                        column: x => x.StudySessionId,
+                        name: "FK_StudySessions_Decks_DeckId",
+                        column: x => x.DeckId,
                         principalTable: "Decks",
                         principalColumn: "DeckId",
                         onDelete: ReferentialAction.Cascade);
@@ -160,7 +163,8 @@ namespace ApiStudyBuddy.Migrations
                 name: "UserDeckGroups",
                 columns: table => new
                 {
-                    UserDeckGroupId = table.Column<int>(type: "int", nullable: false),
+                    UserDeckGroupId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     DeckGroupId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -168,8 +172,8 @@ namespace ApiStudyBuddy.Migrations
                 {
                     table.PrimaryKey("PK_UserDeckGroups", x => x.UserDeckGroupId);
                     table.ForeignKey(
-                        name: "FK_UserDeckGroups_DeckGroups_UserDeckGroupId",
-                        column: x => x.UserDeckGroupId,
+                        name: "FK_UserDeckGroups_DeckGroups_DeckGroupId",
+                        column: x => x.DeckGroupId,
                         principalTable: "DeckGroups",
                         principalColumn: "DeckGroupId",
                         onDelete: ReferentialAction.Cascade);
@@ -211,7 +215,8 @@ namespace ApiStudyBuddy.Migrations
                 name: "StudySessionsFlashCards",
                 columns: table => new
                 {
-                    StudySessionFlashCardId = table.Column<int>(type: "int", nullable: false),
+                    StudySessionFlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     StudySessionId = table.Column<int>(type: "int", nullable: false),
                     FlashCardId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -219,14 +224,14 @@ namespace ApiStudyBuddy.Migrations
                 {
                     table.PrimaryKey("PK_StudySessionsFlashCards", x => x.StudySessionFlashCardId);
                     table.ForeignKey(
-                        name: "FK_StudySessionsFlashCards_FlashCards_StudySessionFlashCardId",
-                        column: x => x.StudySessionFlashCardId,
+                        name: "FK_StudySessionsFlashCards_FlashCards_FlashCardId",
+                        column: x => x.FlashCardId,
                         principalTable: "FlashCards",
                         principalColumn: "FlashCardId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudySessionsFlashCards_StudySessions_StudySessionFlashCardId",
-                        column: x => x.StudySessionFlashCardId,
+                        name: "FK_StudySessionsFlashCards_StudySessions_StudySessionId",
+                        column: x => x.StudySessionId,
                         principalTable: "StudySessions",
                         principalColumn: "StudySessionId",
                         onDelete: ReferentialAction.Cascade);
@@ -281,7 +286,7 @@ namespace ApiStudyBuddy.Migrations
             migrationBuilder.InsertData(
                 table: "StudySessions",
                 columns: new[] { "StudySessionId", "DeckGroupId", "DeckId", "EndTime", "StartTime", "UserId" },
-                values: new object[] { 1, 0, 1, new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified), new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified), 1 });
+                values: new object[] { 1, 1, 1, new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified), new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified), 1 });
 
             migrationBuilder.InsertData(
                 table: "UserDeckGroups",
@@ -299,9 +304,59 @@ namespace ApiStudyBuddy.Migrations
                 values: new object[] { 1, 1, 1 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeckFlashCards_DeckId",
+                table: "DeckFlashCards",
+                column: "DeckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeckFlashCards_FlashCardId",
+                table: "DeckFlashCards",
+                column: "FlashCardId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeckGroupDecks_DeckGroupId",
+                table: "DeckGroupDecks",
+                column: "DeckGroupId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeckGroupDecks_DeckId",
+                table: "DeckGroupDecks",
+                column: "DeckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudySessions_DeckGroupId",
+                table: "StudySessions",
+                column: "DeckGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudySessions_DeckId",
+                table: "StudySessions",
+                column: "DeckId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudySessions_UserId",
                 table: "StudySessions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudySessionsFlashCards_FlashCardId",
+                table: "StudySessionsFlashCards",
+                column: "FlashCardId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudySessionsFlashCards_StudySessionId",
+                table: "StudySessionsFlashCards",
+                column: "StudySessionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDeckGroups_DeckGroupId",
+                table: "UserDeckGroups",
+                column: "DeckGroupId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserDeckGroups_UserId",

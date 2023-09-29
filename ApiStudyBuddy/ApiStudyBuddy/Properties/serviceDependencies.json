@@ -1,8 +1,13 @@
 {
   "dependencies": {
-    "mssql3": {
+    "mssql1": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:Server=waucitdb1;Database=NTCStudyBuddy_Prod;TrustServerCertificate=TRUE;UserId=StudyBuddy;Password=quizletNtc;MultipleActiveResultSets=TRUE"
+      "connectionId": "ConnectionStrings:Server=waucitdb1;Database=NTCStudyBuddy_Prod;TrustServerCertificate=TRUE;UserId=StudyBuddy;Password=quizletNtc;MultipleActiveResultSets=TRUE",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:Server=waucitdb2;Database=StudyBuddy_Test;TrustServerCertificate=TRUE;UserId=TestStudyBuddy;Password=quizlet;MultipleActiveResultSets=TRUE"
     }
   }
 }

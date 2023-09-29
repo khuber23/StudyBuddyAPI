@@ -1,14 +1,15 @@
 {
   "dependencies": {
-    "mssql2": {
-      "ignored": "true",
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:ApiStudyBuddyContext"
-    },
-    "mssql3": {
-      "secretStore": "LocalSecretsFile",
+    "mssql1": {
+      "secretStore": null,
       "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:Server=waucitdb1;Database=NTCStudyBuddy_Prod;TrustServerCertificate=TRUE;UserId=StudyBuddy;Password=quizletNtc;MultipleActiveResultSets=TRUE"
+      "connectionId": "ConnectionStrings:Server=waucitdb1;Database=NTCStudyBuddy_Prod;TrustServerCertificate=TRUE;UserId=StudyBuddy;Password=quizletNtc;MultipleActiveResultSets=TRUE",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "secretStore": null,
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:Server=waucitdb2;Database=StudyBuddy_Test;TrustServerCertificate=TRUE;UserId=TestStudyBuddy;Password=quizlet;MultipleActiveResultSets=TRUE"
     }
   }
 }

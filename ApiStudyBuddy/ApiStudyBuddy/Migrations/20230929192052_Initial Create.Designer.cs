@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20230917191122_Add_Tables_Initial_Create")]
-    partial class Add_Tables_Initial_Create
+    [Migration("20230929192052_Initial Create")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,10 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
                 {
                     b.Property<int>("DeckFlashCardId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeckFlashCardId"));
 
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
@@ -76,6 +79,11 @@ namespace ApiStudyBuddy.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DeckFlashCardId");
+
+                    b.HasIndex("DeckId");
+
+                    b.HasIndex("FlashCardId")
+                        .IsUnique();
 
                     b.ToTable("DeckFlashCards");
 
@@ -118,7 +126,10 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
                 {
                     b.Property<int>("DeckGroupDeckId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeckGroupDeckId"));
 
                     b.Property<int>("DeckGroupId")
                         .HasColumnType("int");
@@ -127,6 +138,11 @@ namespace ApiStudyBuddy.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DeckGroupDeckId");
+
+                    b.HasIndex("DeckGroupId")
+                        .IsUnique();
+
+                    b.HasIndex("DeckId");
 
                     b.ToTable("DeckGroupDecks");
 
@@ -193,7 +209,10 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
                 {
                     b.Property<int>("StudySessionId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudySessionId"));
 
                     b.Property<int>("DeckGroupId")
                         .HasColumnType("int");
@@ -212,6 +231,10 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("StudySessionId");
 
+                    b.HasIndex("DeckGroupId");
+
+                    b.HasIndex("DeckId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("StudySessions");
@@ -220,7 +243,7 @@ namespace ApiStudyBuddy.Migrations
                         new
                         {
                             StudySessionId = 1,
-                            DeckGroupId = 0,
+                            DeckGroupId = 1,
                             DeckId = 1,
                             EndTime = new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified),
@@ -231,7 +254,10 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
                 {
                     b.Property<int>("StudySessionFlashCardId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudySessionFlashCardId"));
 
                     b.Property<int>("FlashCardId")
                         .HasColumnType("int");
@@ -240,6 +266,12 @@ namespace ApiStudyBuddy.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("StudySessionFlashCardId");
+
+                    b.HasIndex("FlashCardId")
+                        .IsUnique();
+
+                    b.HasIndex("StudySessionId")
+                        .IsUnique();
 
                     b.ToTable("StudySessionsFlashCards");
 
@@ -264,11 +296,9 @@ namespace ApiStudyBuddy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -339,7 +369,10 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeckGroup", b =>
                 {
                     b.Property<int>("UserDeckGroupId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserDeckGroupId"));
 
                     b.Property<int>("DeckGroupId")
                         .HasColumnType("int");
@@ -348,6 +381,9 @@ namespace ApiStudyBuddy.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("UserDeckGroupId");
+
+                    b.HasIndex("DeckGroupId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -366,13 +402,13 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
                         .WithMany("DeckFlashCards")
-                        .HasForeignKey("DeckFlashCardId")
+                        .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
                         .WithOne("DeckFlashCard")
-                        .HasForeignKey("ApiStudyBuddy.Models.DeckFlashCard", "DeckFlashCardId")
+                        .HasForeignKey("ApiStudyBuddy.Models.DeckFlashCard", "FlashCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,13 +421,13 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
                         .WithOne("DeckGroupDeck")
-                        .HasForeignKey("ApiStudyBuddy.Models.DeckGroupDeck", "DeckGroupDeckId")
+                        .HasForeignKey("ApiStudyBuddy.Models.DeckGroupDeck", "DeckGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
                         .WithMany("DeckGroupDecks")
-                        .HasForeignKey("DeckGroupDeckId")
+                        .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -404,13 +440,13 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
                         .WithMany("StudySessions")
-                        .HasForeignKey("StudySessionId")
+                        .HasForeignKey("DeckGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
                         .WithMany("StudySessions")
-                        .HasForeignKey("StudySessionId")
+                        .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -431,13 +467,13 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
                         .WithOne("StudySessionFlashCard")
-                        .HasForeignKey("ApiStudyBuddy.Models.StudySessionFlashCard", "StudySessionFlashCardId")
+                        .HasForeignKey("ApiStudyBuddy.Models.StudySessionFlashCard", "FlashCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiStudyBuddy.Models.StudySession", "StudySession")
                         .WithOne("StudySessionFlashCard")
-                        .HasForeignKey("ApiStudyBuddy.Models.StudySessionFlashCard", "StudySessionFlashCardId")
+                        .HasForeignKey("ApiStudyBuddy.Models.StudySessionFlashCard", "StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -469,7 +505,7 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
                         .WithOne("UserDeckGroup")
-                        .HasForeignKey("ApiStudyBuddy.Models.UserDeckGroup", "UserDeckGroupId")
+                        .HasForeignKey("ApiStudyBuddy.Models.UserDeckGroup", "DeckGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
