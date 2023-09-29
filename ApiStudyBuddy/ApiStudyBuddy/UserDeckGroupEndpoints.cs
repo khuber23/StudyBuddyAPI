@@ -41,8 +41,12 @@ public static class UserDeckGroupEndpoints
             return await db.UserDeckGroups.AsNoTracking()
             .Include(model => model.User)
             .Include(model => model.DeckGroup)
-             .Where(model => model.UserId == userid)
-             .ToListAsync();
+            .ThenInclude(model => model.DeckGroupDeck)
+            .ThenInclude(model => model.Deck)
+            .ThenInclude(model => model.DeckFlashCards)
+            .ThenInclude(model => model.FlashCard)
+            .Where(model => model.UserId == userid)
+            .ToListAsync();
         })
         .WithName("GetUserDeckGroupByUserId")
         .WithOpenApi();
