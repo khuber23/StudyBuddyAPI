@@ -87,7 +87,7 @@ namespace ApiStudyBuddy.Data
 			modelBuilder.Entity<UserDeckGroup>()
 				.HasOne(x => x.DeckGroup)
 				.WithOne(x => x.UserDeckGroup)
-				.HasForeignKey<UserDeckGroup>(x => x.UserDeckGroupId)
+				.HasForeignKey<DeckGroup>(x => x.DeckGroupId)
 				.IsRequired();
 
 			// Define relationship between DeckGroup(1) and DeckGroupDeck(1)
