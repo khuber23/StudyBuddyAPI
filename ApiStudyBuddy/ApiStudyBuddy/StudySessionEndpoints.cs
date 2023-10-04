@@ -29,6 +29,19 @@ public static class StudySessionEndpoints
         .WithName("GetStudySessionById")
         .WithOpenApi();
 
+        group.MapGet("/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessions.AsNoTracking()
+            .Include(model => model.StudySessionFlashCard)
+            .Include(model => model.Deck)
+            .Include(model => model.DeckGroup)
+            .Include(model => model.User)
+            .Where(model => model.UserId == userid)
+            .ToListAsync();
+        })
+      .WithName("GetFullStudySession")
+      .WithOpenApi();
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, StudySession studySession, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessions

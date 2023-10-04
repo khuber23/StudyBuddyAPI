@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20230929192052_Initial Create")]
-    partial class InitialCreate
+    [Migration("20231004140453_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,7 +118,7 @@ namespace ApiStudyBuddy.Migrations
                         new
                         {
                             DeckGroupId = 1,
-                            DeckGroupDescription = "",
+                            DeckGroupDescription = "DeckGroup relating to Design Patterns in Coding",
                             DeckGroupName = "Design Patterns"
                         });
                 });
@@ -265,6 +265,9 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<int>("StudySessionId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("WasCorrect")
+                        .HasColumnType("bit");
+
                     b.HasKey("StudySessionFlashCardId");
 
                     b.HasIndex("FlashCardId")
@@ -280,7 +283,8 @@ namespace ApiStudyBuddy.Migrations
                         {
                             StudySessionFlashCardId = 1,
                             FlashCardId = 1,
-                            StudySessionId = 1
+                            StudySessionId = 1,
+                            WasCorrect = true
                         });
                 });
 

@@ -99,7 +99,7 @@ namespace ApiStudyBuddy.Data
 
 			//// =================================================================
 
-			// Define relationship between StudySession(1) and StudySessionFlashCard (1)
+			//// Define relationship between StudySession(1) and StudySessionFlashCard (1)
 			modelBuilder.Entity<StudySessionFlashCard>()
 				.HasOne(x => x.StudySession)
 				.WithOne(x => x.StudySessionFlashCard)
@@ -109,18 +109,18 @@ namespace ApiStudyBuddy.Data
 			//// =================================================================
 
 			// Define relationship between FlashCard(1) and DeckFlashCard(1)
-			modelBuilder.Entity<DeckFlashCard>()
-				.HasOne(x => x.FlashCard)
-				.WithOne(x => x.DeckFlashCard)
-				.HasForeignKey<DeckFlashCard>(x => x.FlashCardId)
-				.IsRequired();
+			//modelBuilder.Entity<DeckFlashCard>()
+			//	.HasOne(x => x.FlashCard)
+			//	.WithOne(x => x.DeckFlashCard)
+			//	.HasForeignKey<DeckFlashCard>(x => x.FlashCardId)
+			//	.IsRequired();
 
 			// Define relationship between FlashCard(1) and StudySessionFlashCard(1)
-			modelBuilder.Entity<StudySessionFlashCard>()
-				.HasOne(x => x.FlashCard)
-				.WithOne(x => x.StudySessionFlashCard)
-				.HasForeignKey<StudySessionFlashCard>(x => x.FlashCardId)
-				.IsRequired();
+			//modelBuilder.Entity<StudySessionFlashCard>()
+			//	.HasOne(x => x.FlashCard)
+			//	.WithOne(x => x.StudySessionFlashCard)
+			//	.HasForeignKey<StudySessionFlashCard>(x => x.FlashCardId)
+			//	.IsRequired();
 
 
 			// Create data for database
@@ -148,7 +148,7 @@ namespace ApiStudyBuddy.Data
 				);
 
 			modelBuilder.Entity<DeckGroup>().HasData(
-				new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "" }
+				new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "DeckGroup relating to Design Patterns in Coding" }
 				);
 
 			modelBuilder.Entity<FlashCard>().HasData(
@@ -176,7 +176,7 @@ namespace ApiStudyBuddy.Data
 				);
 
 			modelBuilder.Entity<StudySessionFlashCard>().HasData(
-				new StudySessionFlashCard { StudySessionFlashCardId = 1, StudySessionId = 1, FlashCardId = 1 }
+				new StudySessionFlashCard { StudySessionFlashCardId = 1, StudySessionId = 1, FlashCardId = 1, WasCorrect = true }
 				);
 
 		}

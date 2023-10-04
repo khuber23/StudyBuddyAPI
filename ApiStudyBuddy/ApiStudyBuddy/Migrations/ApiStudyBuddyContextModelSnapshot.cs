@@ -115,7 +115,7 @@ namespace ApiStudyBuddy.Migrations
                         new
                         {
                             DeckGroupId = 1,
-                            DeckGroupDescription = "",
+                            DeckGroupDescription = "DeckGroup relating to Design Patterns in Coding",
                             DeckGroupName = "Design Patterns"
                         });
                 });
@@ -262,6 +262,9 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<int>("StudySessionId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("WasCorrect")
+                        .HasColumnType("bit");
+
                     b.HasKey("StudySessionFlashCardId");
 
                     b.HasIndex("FlashCardId")
@@ -277,7 +280,8 @@ namespace ApiStudyBuddy.Migrations
                         {
                             StudySessionFlashCardId = 1,
                             FlashCardId = 1,
-                            StudySessionId = 1
+                            StudySessionId = 1,
+                            WasCorrect = true
                         });
                 });
 

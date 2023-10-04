@@ -8,6 +8,8 @@
 
 		public int FlashCardId { get; set; }
 
+		public bool WasCorrect { get; set; }
+
 		public StudySession? StudySession { get; set; }
 
 		public FlashCard? FlashCard { get; set; }

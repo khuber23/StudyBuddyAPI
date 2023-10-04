@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiStudyBuddy.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -218,7 +218,8 @@ namespace ApiStudyBuddy.Migrations
                     StudySessionFlashCardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudySessionId = table.Column<int>(type: "int", nullable: false),
-                    FlashCardId = table.Column<int>(type: "int", nullable: false)
+                    FlashCardId = table.Column<int>(type: "int", nullable: false),
+                    WasCorrect = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,7 +241,7 @@ namespace ApiStudyBuddy.Migrations
             migrationBuilder.InsertData(
                 table: "DeckGroups",
                 columns: new[] { "DeckGroupId", "DeckGroupDescription", "DeckGroupName" },
-                values: new object[] { 1, "", "Design Patterns" });
+                values: new object[] { 1, "DeckGroup relating to Design Patterns in Coding", "Design Patterns" });
 
             migrationBuilder.InsertData(
                 table: "Decks",
@@ -300,8 +301,8 @@ namespace ApiStudyBuddy.Migrations
 
             migrationBuilder.InsertData(
                 table: "StudySessionsFlashCards",
-                columns: new[] { "StudySessionFlashCardId", "FlashCardId", "StudySessionId" },
-                values: new object[] { 1, 1, 1 });
+                columns: new[] { "StudySessionFlashCardId", "FlashCardId", "StudySessionId", "WasCorrect" },
+                values: new object[] { 1, 1, 1, true });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeckFlashCards_DeckId",
