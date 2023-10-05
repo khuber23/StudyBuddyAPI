@@ -38,7 +38,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("DeckId");
 
-                    b.ToTable("Decks");
+                    b.ToTable("Decks", (string)null);
 
                     b.HasData(
                         new
@@ -79,7 +79,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("DeckFlashCards");
+                    b.ToTable("DeckFlashCards", (string)null);
 
                     b.HasData(
                         new
@@ -106,7 +106,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("DeckGroupId");
 
-                    b.ToTable("DeckGroups");
+                    b.ToTable("DeckGroups", (string)null);
 
                     b.HasData(
                         new
@@ -138,7 +138,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("DeckGroupDecks");
+                    b.ToTable("DeckGroupDecks", (string)null);
 
                     b.HasData(
                         new
@@ -170,7 +170,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckFlashCardId");
 
-                    b.ToTable("FlashCards");
+                    b.ToTable("FlashCards", (string)null);
 
                     b.HasData(
                         new
@@ -236,7 +236,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("StudySessions");
+                    b.ToTable("StudySessions", (string)null);
 
                     b.HasData(
                         new
@@ -274,7 +274,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("StudySessionId");
 
-                    b.ToTable("StudySessionsFlashCards");
+                    b.ToTable("StudySessionsFlashCards", (string)null);
 
                     b.HasData(
                         new
@@ -313,7 +313,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -366,7 +366,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDecks");
+                    b.ToTable("UserDecks", (string)null);
 
                     b.HasData(
                         new
@@ -398,7 +398,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDeckGroups");
+                    b.ToTable("UserDeckGroups", (string)null);
 
                     b.HasData(
                         new
