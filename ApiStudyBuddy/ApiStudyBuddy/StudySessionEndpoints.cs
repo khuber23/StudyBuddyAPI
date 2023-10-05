@@ -33,6 +33,7 @@ public static class StudySessionEndpoints
         {
             return await db.StudySessions.AsNoTracking()
             .Include(model => model.StudySessionFlashCards)
+            .ThenInclude(model => model.FlashCard)
             .Include(model => model.Deck)
             .Include(model => model.DeckGroup)
             .Include(model => model.User)
