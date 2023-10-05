@@ -34,9 +34,10 @@ public static class StudySessionFlashCardEndpoints
             var affected = await db.StudySessionsFlashCards
                 .Where(model => model.StudySessionFlashCardId == studysessionflashcardid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.StudySessionFlashCardId, studySessionFlashCard.StudySessionFlashCardId)
+                    //.SetProperty(m => m.StudySessionFlashCardId, studySessionFlashCard.StudySessionFlashCardId)
                     .SetProperty(m => m.StudySessionId, studySessionFlashCard.StudySessionId)
                     .SetProperty(m => m.FlashCardId, studySessionFlashCard.FlashCardId)
+                    .SetProperty(m=> m.WasCorrect, studySessionFlashCard.WasCorrect)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

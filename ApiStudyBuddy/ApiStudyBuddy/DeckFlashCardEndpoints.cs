@@ -34,7 +34,7 @@ public static class DeckFlashCardEndpoints
             var affected = await db.DeckFlashCards
                 .Where(model => model.DeckFlashCardId == deckflashcardid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.DeckFlashCardId, deckFlashCard.DeckFlashCardId)
+                    //.SetProperty(m => m.DeckFlashCardId, deckFlashCard.DeckFlashCardId)
                     .SetProperty(m => m.DeckId, deckFlashCard.DeckId)
                     .SetProperty(m => m.FlashCardId, deckFlashCard.FlashCardId)
                     );

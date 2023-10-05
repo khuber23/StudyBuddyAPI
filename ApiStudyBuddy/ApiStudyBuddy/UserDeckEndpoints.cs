@@ -45,7 +45,7 @@ public static class UserDeckEndpoints
             var affected = await db.UserDecks
                 .Where(model => model.UserDeckId == userdeckid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.UserDeckId, userDeck.UserDeckId)
+                    //.SetProperty(m => m.UserDeckId, userDeck.UserDeckId)
                     .SetProperty(m => m.UserId, userDeck.UserId)
                     .SetProperty(m => m.DeckId, userDeck.DeckId)
                     );
