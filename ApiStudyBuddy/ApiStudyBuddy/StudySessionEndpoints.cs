@@ -33,6 +33,7 @@ public static class StudySessionEndpoints
         {
             return await db.StudySessions.AsNoTracking()
             .Include(model => model.StudySessionFlashCards)
+            .ThenInclude(model => model.FlashCard)
             .Include(model => model.Deck)
             .Include(model => model.DeckGroup)
             .Include(model => model.User)
@@ -47,7 +48,7 @@ public static class StudySessionEndpoints
             var affected = await db.StudySessions
                 .Where(model => model.StudySessionId == studysessionid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.StudySessionId, studySession.StudySessionId)
+                    //.SetProperty(m => m.StudySessionId, studySession.StudySessionId)
                     .SetProperty(m => m.StartTime, studySession.StartTime)
                     .SetProperty(m => m.EndTime, studySession.EndTime)
                     .SetProperty(m => m.DeckGroupId, studySession.DeckGroupId)
