@@ -42,20 +42,6 @@ namespace ApiStudyBuddy.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FlashCards",
-                columns: table => new
-                {
-                    FlashCardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FlashCardQuestion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FlashCards", x => x.FlashCardId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -70,6 +56,26 @@ namespace ApiStudyBuddy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeckFlashCards",
+                columns: table => new
+                {
+                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeckId = table.Column<int>(type: "int", nullable: false),
+                    FlashCardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeckFlashCards", x => x.DeckFlashCardId);
+                    table.ForeignKey(
+                        name: "FK_DeckFlashCards_Decks_DeckId",
+                        column: x => x.DeckId,
+                        principalTable: "Decks",
+                        principalColumn: "DeckId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,32 +101,6 @@ namespace ApiStudyBuddy.Migrations
                         column: x => x.DeckId,
                         principalTable: "Decks",
                         principalColumn: "DeckId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeckFlashCards",
-                columns: table => new
-                {
-                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeckId = table.Column<int>(type: "int", nullable: false),
-                    FlashCardId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeckFlashCards", x => x.DeckFlashCardId);
-                    table.ForeignKey(
-                        name: "FK_DeckFlashCards_Decks_DeckId",
-                        column: x => x.DeckId,
-                        principalTable: "Decks",
-                        principalColumn: "DeckId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DeckFlashCards_FlashCards_FlashCardId",
-                        column: x => x.FlashCardId,
-                        principalTable: "FlashCards",
-                        principalColumn: "FlashCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -212,6 +192,26 @@ namespace ApiStudyBuddy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FlashCards",
+                columns: table => new
+                {
+                    FlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FlashCardQuestion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeckFlashCardId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FlashCards", x => x.FlashCardId);
+                    table.ForeignKey(
+                        name: "FK_FlashCards_DeckFlashCards_DeckFlashCardId",
+                        column: x => x.DeckFlashCardId,
+                        principalTable: "DeckFlashCards",
+                        principalColumn: "DeckFlashCardId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StudySessionsFlashCards",
                 columns: table => new
                 {
@@ -255,14 +255,14 @@ namespace ApiStudyBuddy.Migrations
 
             migrationBuilder.InsertData(
                 table: "FlashCards",
-                columns: new[] { "FlashCardId", "FlashCardAnswer", "FlashCardQuestion" },
+                columns: new[] { "FlashCardId", "DeckFlashCardId", "FlashCardAnswer", "FlashCardQuestion" },
                 values: new object[,]
                 {
-                    { 1, "Creates an instance of several families of classes", "What is abstract factory" },
-                    { 2, "A class of which only a single instance can exist", "What is Singleton?" },
-                    { 3, "Add responsibilites to objects dynamically", "What is decorator?" },
-                    { 4, "A single class that represents an entire subsystem", "What is facade?" },
-                    { 5, "Sequentially access the elements of a collection", "What is iterator?" }
+                    { 1, null, "Creates an instance of several families of classes", "What is abstract factory" },
+                    { 2, null, "A class of which only a single instance can exist", "What is Singleton?" },
+                    { 3, null, "Add responsibilites to objects dynamically", "What is decorator?" },
+                    { 4, null, "A single class that represents an entire subsystem", "What is facade?" },
+                    { 5, null, "Sequentially access the elements of a collection", "What is iterator?" }
                 });
 
             migrationBuilder.InsertData(
@@ -271,7 +271,8 @@ namespace ApiStudyBuddy.Migrations
                 values: new object[,]
                 {
                     { 1, "JohnDoe@gmail.com", "John", "Doe", "1234", "JDoe1" },
-                    { 2, "MaryJane@gmail.com", "Mary", "Jane", "4321", "MJane1" }
+                    { 2, "MaryJane@gmail.com", "Mary", "Jane", "4321", "MJane1" },
+                    { 3, "kayla.huber23@gmail.com", "Kayla", "Huber", "Kitkat23!", "Khuber" }
                 });
 
             migrationBuilder.InsertData(
@@ -310,12 +311,6 @@ namespace ApiStudyBuddy.Migrations
                 column: "DeckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeckFlashCards_FlashCardId",
-                table: "DeckFlashCards",
-                column: "FlashCardId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DeckGroupDecks_DeckGroupId",
                 table: "DeckGroupDecks",
                 column: "DeckGroupId",
@@ -325,6 +320,11 @@ namespace ApiStudyBuddy.Migrations
                 name: "IX_DeckGroupDecks_DeckId",
                 table: "DeckGroupDecks",
                 column: "DeckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FlashCards_DeckFlashCardId",
+                table: "FlashCards",
+                column: "DeckFlashCardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudySessions_DeckGroupId",
@@ -344,14 +344,12 @@ namespace ApiStudyBuddy.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_StudySessionsFlashCards_FlashCardId",
                 table: "StudySessionsFlashCards",
-                column: "FlashCardId",
-                unique: true);
+                column: "FlashCardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudySessionsFlashCards_StudySessionId",
                 table: "StudySessionsFlashCards",
-                column: "StudySessionId",
-                unique: true);
+                column: "StudySessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserDeckGroups_DeckGroupId",
@@ -380,9 +378,6 @@ namespace ApiStudyBuddy.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DeckFlashCards");
-
-            migrationBuilder.DropTable(
                 name: "DeckGroupDecks");
 
             migrationBuilder.DropTable(
@@ -401,13 +396,16 @@ namespace ApiStudyBuddy.Migrations
                 name: "StudySessions");
 
             migrationBuilder.DropTable(
+                name: "DeckFlashCards");
+
+            migrationBuilder.DropTable(
                 name: "DeckGroups");
 
             migrationBuilder.DropTable(
-                name: "Decks");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Decks");
         }
     }
 }
