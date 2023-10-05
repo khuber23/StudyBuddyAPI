@@ -10,6 +10,6 @@
 
 		public Deck? Deck { get; set; }
 
-		public FlashCard? FlashCard { get; set; }
+		public List<FlashCard>? FlashCards { get; set; }
 	}
 }

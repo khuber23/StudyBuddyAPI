@@ -99,35 +99,14 @@ namespace ApiStudyBuddy.Data
 
 			//// =================================================================
 
-			//// Define relationship between StudySession(1) and StudySessionFlashCard (1)
-			modelBuilder.Entity<StudySessionFlashCard>()
-				.HasOne(x => x.StudySession)
-				.WithOne(x => x.StudySessionFlashCard)
-				.HasForeignKey<StudySessionFlashCard>(x => x.StudySessionId)
-				.IsRequired();
-
-			//// =================================================================
-
-			// Define relationship between FlashCard(1) and DeckFlashCard(1)
-			//modelBuilder.Entity<DeckFlashCard>()
-			//	.HasOne(x => x.FlashCard)
-			//	.WithOne(x => x.DeckFlashCard)
-			//	.HasForeignKey<DeckFlashCard>(x => x.FlashCardId)
-			//	.IsRequired();
-
-			// Define relationship between FlashCard(1) and StudySessionFlashCard(1)
-			//modelBuilder.Entity<StudySessionFlashCard>()
-			//	.HasOne(x => x.FlashCard)
-			//	.WithOne(x => x.StudySessionFlashCard)
-			//	.HasForeignKey<StudySessionFlashCard>(x => x.FlashCardId)
-			//	.IsRequired();
-
 
 			// Create data for database
 			modelBuilder.Entity<User>().HasData(
 				new User { UserId = 1, FirstName = "John", LastName = "Doe", Email = "JohnDoe@gmail.com", Username = "JDoe1", Password = "1234" },
-				new User { UserId = 2, FirstName = "Mary", LastName = "Jane", Email = "MaryJane@gmail.com", Username = "MJane1", Password = "4321" }
-				);
+				new User { UserId = 2, FirstName = "Mary", LastName = "Jane", Email = "MaryJane@gmail.com", Username = "MJane1", Password = "4321" },
+                new User { UserId = 3, FirstName = "Kayla", LastName = "Huber", Email = "kayla.huber23@gmail.com", Username = "Khuber", Password = "Kitkat23!" }
+
+                );
 
 			modelBuilder.Entity<StudySession>().HasData(
 				new StudySession

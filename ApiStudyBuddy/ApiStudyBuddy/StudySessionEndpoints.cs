@@ -32,7 +32,7 @@ public static class StudySessionEndpoints
         group.MapGet("/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessions.AsNoTracking()
-            .Include(model => model.StudySessionFlashCard)
+            .Include(model => model.StudySessionFlashCards)
             .Include(model => model.Deck)
             .Include(model => model.DeckGroup)
             .Include(model => model.User)

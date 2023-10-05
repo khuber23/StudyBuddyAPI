@@ -44,7 +44,7 @@ public static class UserDeckGroupEndpoints
             .ThenInclude(model => model.DeckGroupDeck)
             .ThenInclude(model => model.Deck)
             .ThenInclude(model => model.DeckFlashCards)
-            .ThenInclude(model => model.FlashCard)
+            .ThenInclude(model => model.FlashCards)
             .Where(model => model.UserId == userid)
             .ToListAsync();
         })

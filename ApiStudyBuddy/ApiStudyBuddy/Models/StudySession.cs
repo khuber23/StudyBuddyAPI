@@ -20,6 +20,6 @@
 
 		public DeckGroup? DeckGroup { get; set; }
 
-		public StudySessionFlashCard? StudySessionFlashCard { get; set; }
+		public List<StudySessionFlashCard>? StudySessionFlashCards { get; set; }
 	}
 }
