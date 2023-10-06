@@ -29,6 +29,54 @@ public static class StudySessionFlashCardEndpoints
         .WithName("GetStudySessionFlashCardById")
         .WithOpenApi();
 
+        group.MapGet("/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+             .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid)
+            .ToListAsync();
+        })
+      .WithName("GetFullStudySessionFlashCardsByUserId")
+      .WithOpenApi();
+
+        group.MapGet("/correct/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid && model.WasCorrect == true)
+            .ToListAsync();
+        })
+      .WithName("GetCorrectStudySessionFlashCardsByUserId")
+      .WithOpenApi();
+
+        group.MapGet("/incorrect/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid && model.WasCorrect == false)
+            .ToListAsync();
+        })
+     .WithName("GetIncorrectStudySessionFlashCardsByUserId")
+     .WithOpenApi();
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionflashcardid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessionsFlashCards
