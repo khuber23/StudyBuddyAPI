@@ -34,6 +34,10 @@ public static class StudySessionFlashCardEndpoints
             return await db.StudySessionsFlashCards.AsNoTracking()
             .Include(model => model.StudySession)
             .ThenInclude(model => model.User)
+             .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
             .Include(model => model.FlashCard)
             .Where(model => model.StudySession.UserId == userid)
             .ToListAsync();
@@ -46,6 +50,10 @@ public static class StudySessionFlashCardEndpoints
             return await db.StudySessionsFlashCards.AsNoTracking()
             .Include(model => model.StudySession)
             .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
             .Include(model => model.FlashCard)
             .Where(model => model.StudySession.UserId == userid && model.WasCorrect == true)
             .ToListAsync();
@@ -58,6 +66,10 @@ public static class StudySessionFlashCardEndpoints
             return await db.StudySessionsFlashCards.AsNoTracking()
             .Include(model => model.StudySession)
             .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
             .Include(model => model.FlashCard)
             .Where(model => model.StudySession.UserId == userid && model.WasCorrect == false)
             .ToListAsync();
