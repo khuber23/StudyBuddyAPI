@@ -139,8 +139,12 @@ namespace ApiStudyBuddy.Data
 				);
 
 			modelBuilder.Entity<UserDeck>().HasData(
-				new UserDeck { UserDeckId = 1, UserId = 1, DeckId = 1 }
-				);
+				new UserDeck { UserDeckId = 1, UserId = 1, DeckId = 1 },
+                new UserDeck { UserDeckId = 2, UserId = 1, DeckId = 2 },
+                new UserDeck { UserDeckId = 3, UserId = 1, DeckId = 3 }
+
+
+                );
 
 			modelBuilder.Entity<UserDeckGroup>().HasData(
 				new UserDeckGroup { UserDeckGroupId = 1, UserId = 1, DeckGroupId = 1 }
