@@ -36,6 +36,7 @@ public static class UserDeckGroupEndpoints
         .WithName("GetUserDeckGroupById")
         .WithOpenApi();
 
+        //full userDeckGroup, gets literally all/most of the info needed.
         group.MapGet("/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.UserDeckGroups.AsNoTracking()
@@ -48,8 +49,20 @@ public static class UserDeckGroupEndpoints
             .Where(model => model.UserId == userid)
             .ToListAsync();
         })
-        .WithName("GetUserDeckGroupByUserId")
+        .WithName("GetFullUserDeckGroupByUserId")
         .WithOpenApi();
+
+        //basically just gets deckgroup and not all the stuff with it...mostly used for the DeckGroup page. The code above made things wonky for that.
+        group.MapGet("/deckgroup/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups.AsNoTracking()
+            .Include(model => model.User)
+            .Include(model => model.DeckGroup)
+            .Where(model => model.UserId == userid)
+            .ToListAsync();
+        })
+       .WithName("GetOnlyUserDeckGroupByUserId")
+       .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckgroupid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
         {
