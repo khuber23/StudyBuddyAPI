@@ -38,7 +38,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("DeckId");
 
-                    b.ToTable("Decks", (string)null);
+                    b.ToTable("Decks");
 
                     b.HasData(
                         new
@@ -79,7 +79,10 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("DeckFlashCards", (string)null);
+                    b.HasIndex("FlashCardId")
+                        .IsUnique();
+
+                    b.ToTable("DeckFlashCards");
 
                     b.HasData(
                         new
@@ -87,6 +90,30 @@ namespace ApiStudyBuddy.Migrations
                             DeckFlashCardId = 1,
                             DeckId = 1,
                             FlashCardId = 1
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 2,
+                            DeckId = 1,
+                            FlashCardId = 2
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 3,
+                            DeckId = 2,
+                            FlashCardId = 3
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 4,
+                            DeckId = 2,
+                            FlashCardId = 4
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 5,
+                            DeckId = 3,
+                            FlashCardId = 5
                         });
                 });
 
@@ -106,13 +133,13 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("DeckGroupId");
 
-                    b.ToTable("DeckGroups", (string)null);
+                    b.ToTable("DeckGroups");
 
                     b.HasData(
                         new
                         {
                             DeckGroupId = 1,
-                            DeckGroupDescription = "DeckGroup relating to Design Patterns in Coding",
+                            DeckGroupDescription = "Solutions to commonly occurring problems in software design.",
                             DeckGroupName = "Design Patterns"
                         });
                 });
@@ -138,7 +165,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("DeckGroupDecks", (string)null);
+                    b.ToTable("DeckGroupDecks");
 
                     b.HasData(
                         new
@@ -146,6 +173,18 @@ namespace ApiStudyBuddy.Migrations
                             DeckGroupDeckId = 1,
                             DeckGroupId = 1,
                             DeckId = 1
+                        },
+                        new
+                        {
+                            DeckGroupDeckId = 2,
+                            DeckGroupId = 1,
+                            DeckId = 2
+                        },
+                        new
+                        {
+                            DeckGroupDeckId = 3,
+                            DeckGroupId = 1,
+                            DeckId = 3
                         });
                 });
 
@@ -157,9 +196,6 @@ namespace ApiStudyBuddy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FlashCardId"));
 
-                    b.Property<int?>("DeckFlashCardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FlashCardAnswer")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,9 +204,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("FlashCardId");
 
-                    b.HasIndex("DeckFlashCardId");
-
-                    b.ToTable("FlashCards", (string)null);
+                    b.ToTable("FlashCards");
 
                     b.HasData(
                         new
@@ -236,7 +270,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("StudySessions", (string)null);
+                    b.ToTable("StudySessions");
 
                     b.HasData(
                         new
@@ -274,7 +308,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("StudySessionId");
 
-                    b.ToTable("StudySessionsFlashCards", (string)null);
+                    b.ToTable("StudySessionsFlashCards");
 
                     b.HasData(
                         new
@@ -283,6 +317,13 @@ namespace ApiStudyBuddy.Migrations
                             FlashCardId = 1,
                             StudySessionId = 1,
                             WasCorrect = true
+                        },
+                        new
+                        {
+                            StudySessionFlashCardId = 2,
+                            FlashCardId = 2,
+                            StudySessionId = 1,
+                            WasCorrect = false
                         });
                 });
 
@@ -313,7 +354,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -366,7 +407,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDecks", (string)null);
+                    b.ToTable("UserDecks");
 
                     b.HasData(
                         new
@@ -398,7 +439,7 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDeckGroups", (string)null);
+                    b.ToTable("UserDeckGroups");
 
                     b.HasData(
                         new
@@ -417,7 +458,15 @@ namespace ApiStudyBuddy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
+                        .WithOne("DeckFlashCard")
+                        .HasForeignKey("ApiStudyBuddy.Models.DeckFlashCard", "FlashCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Deck");
+
+                    b.Navigation("FlashCard");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
@@ -437,15 +486,6 @@ namespace ApiStudyBuddy.Migrations
                     b.Navigation("Deck");
 
                     b.Navigation("DeckGroup");
-                });
-
-            modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
-                {
-                    b.HasOne("ApiStudyBuddy.Models.DeckFlashCard", "DeckFlashCard")
-                        .WithMany("FlashCards")
-                        .HasForeignKey("DeckFlashCardId");
-
-                    b.Navigation("DeckFlashCard");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
@@ -543,11 +583,6 @@ namespace ApiStudyBuddy.Migrations
                     b.Navigation("UserDeck");
                 });
 
-            modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
-                {
-                    b.Navigation("FlashCards");
-                });
-
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroup", b =>
                 {
                     b.Navigation("DeckGroupDeck");
@@ -559,6 +594,8 @@ namespace ApiStudyBuddy.Migrations
 
             modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
                 {
+                    b.Navigation("DeckFlashCard");
+
                     b.Navigation("StudySessionFlashCard");
                 });
 

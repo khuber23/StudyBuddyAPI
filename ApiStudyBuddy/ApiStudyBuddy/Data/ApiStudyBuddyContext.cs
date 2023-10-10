@@ -127,7 +127,7 @@ namespace ApiStudyBuddy.Data
 				);
 
 			modelBuilder.Entity<DeckGroup>().HasData(
-				new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "DeckGroup relating to Design Patterns in Coding" }
+				new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "Solutions to commonly occurring problems in software design." }
 				);
 
 			modelBuilder.Entity<FlashCard>().HasData(
@@ -147,16 +147,25 @@ namespace ApiStudyBuddy.Data
 				);
 
 			modelBuilder.Entity<DeckGroupDeck>().HasData(
-				new DeckGroupDeck { DeckGroupDeckId = 1, DeckGroupId = 1, DeckId = 1 }
-				);
+				new DeckGroupDeck { DeckGroupDeckId = 1, DeckGroupId = 1, DeckId = 1 },
+                new DeckGroupDeck { DeckGroupDeckId = 2, DeckGroupId = 1, DeckId = 2 },
+                new DeckGroupDeck { DeckGroupDeckId = 3, DeckGroupId = 1, DeckId = 3 }
+
+                );
 
 			modelBuilder.Entity<DeckFlashCard>().HasData(
-				new DeckFlashCard { DeckFlashCardId = 1, DeckId = 1, FlashCardId = 1, }
-				);
+				new DeckFlashCard { DeckFlashCardId = 1, DeckId = 1, FlashCardId = 1, },
+                new DeckFlashCard { DeckFlashCardId = 2, DeckId = 1, FlashCardId = 2, },
+                new DeckFlashCard { DeckFlashCardId = 3, DeckId = 2, FlashCardId = 3, },
+                new DeckFlashCard { DeckFlashCardId = 4, DeckId = 2, FlashCardId = 4, },
+                new DeckFlashCard { DeckFlashCardId = 5, DeckId = 3, FlashCardId = 5, }
+
+                );
 
 			modelBuilder.Entity<StudySessionFlashCard>().HasData(
-				new StudySessionFlashCard { StudySessionFlashCardId = 1, StudySessionId = 1, FlashCardId = 1, WasCorrect = true }
-				);
+				new StudySessionFlashCard { StudySessionFlashCardId = 1, StudySessionId = 1, FlashCardId = 1, WasCorrect = true },
+                new StudySessionFlashCard { StudySessionFlashCardId = 2, StudySessionId = 1, FlashCardId = 2, WasCorrect = false }
+                );
 
 		}
 	}
