@@ -3,11 +3,12 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class StudySessionEndpoints
 {
-    public static void MapStudySessionEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapStudySessionEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/StudySession").WithTags(nameof(StudySession));
 
@@ -29,28 +30,15 @@ public static class StudySessionEndpoints
         .WithName("GetStudySessionById")
         .WithOpenApi();
 
-        group.MapGet("/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
-        {
-            return await db.StudySessions.AsNoTracking()
-            .Include(model => model.StudySessionFlashCards)
-            .ThenInclude(model => model.FlashCard)
-            .Include(model => model.Deck)
-            .Include(model => model.DeckGroup)
-            .Include(model => model.User)
-            .Where(model => model.UserId == userid)
-            .ToListAsync();
-        })
-      .WithName("GetFullStudySession")
-      .WithOpenApi();
-
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, StudySession studySession, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessions
                 .Where(model => model.StudySessionId == studysessionid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.StudySessionId, studySession.StudySessionId)
+                    .SetProperty(m => m.StudySessionId, studySession.StudySessionId)
                     .SetProperty(m => m.StartTime, studySession.StartTime)
                     .SetProperty(m => m.EndTime, studySession.EndTime)
+                    .SetProperty(m => m.IsCompleted, studySession.IsCompleted)
                     .SetProperty(m => m.DeckGroupId, studySession.DeckGroupId)
                     .SetProperty(m => m.DeckId, studySession.DeckId)
                     .SetProperty(m => m.UserId, studySession.UserId)
@@ -64,7 +52,7 @@ public static class StudySessionEndpoints
         {
             db.StudySessions.Add(studySession);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/StudySession/{studySession.StudySessionId}",studySession);
+            return TypedResults.Created($"/api/StudySession/{studySession.StudySessionId}", studySession);
         })
         .WithName("CreateStudySession")
         .WithOpenApi();

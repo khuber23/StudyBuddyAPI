@@ -3,11 +3,12 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class DeckGroupDeckEndpoints
 {
-    public static void MapDeckGroupDeckEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapDeckGroupDeckEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/DeckGroupDeck").WithTags(nameof(DeckGroupDeck));
 
@@ -29,23 +30,12 @@ public static class DeckGroupDeckEndpoints
         .WithName("GetDeckGroupDeckById")
         .WithOpenApi();
 
-        group.MapGet("/MVC/{deckgroupid}", async (int deckgroupid, ApiStudyBuddyContext db) =>
-        {
-            return await db.DeckGroupDecks.AsNoTracking()
-            .Include(model => model.DeckGroup)
-            .Include(model => model.Deck)
-            .Where(model => model.DeckGroupId == deckgroupid)
-            .ToListAsync();
-        })
-      .WithName("GetDeckGroupDeckByDeckGroupId")
-      .WithOpenApi();
-
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupdeckid, DeckGroupDeck deckGroupDeck, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroupDecks
                 .Where(model => model.DeckGroupDeckId == deckgroupdeckid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.DeckGroupDeckId, deckGroupDeck.DeckGroupDeckId)
+                    .SetProperty(m => m.DeckGroupDeckId, deckGroupDeck.DeckGroupDeckId)
                     .SetProperty(m => m.DeckGroupId, deckGroupDeck.DeckGroupId)
                     .SetProperty(m => m.DeckId, deckGroupDeck.DeckId)
                     );
@@ -58,7 +48,7 @@ public static class DeckGroupDeckEndpoints
         {
             db.DeckGroupDecks.Add(deckGroupDeck);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DeckGroupDeck/{deckGroupDeck.DeckGroupDeckId}",deckGroupDeck);
+            return TypedResults.Created($"/api/DeckGroupDeck/{deckGroupDeck.DeckGroupDeckId}", deckGroupDeck);
         })
         .WithName("CreateDeckGroupDeck")
         .WithOpenApi();

@@ -7,9 +7,5 @@
 		public int DeckGroupId { get; set; }
 
 		public int DeckId { get; set; }
-
-		public DeckGroup? DeckGroup { get; set; }
-
-		public Deck? Deck { get; set; }
 	}
 }

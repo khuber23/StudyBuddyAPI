@@ -3,11 +3,12 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class DeckGroupEndpoints
 {
-    public static void MapDeckGroupEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapDeckGroupEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/DeckGroup").WithTags(nameof(DeckGroup));
 
@@ -17,6 +18,8 @@ public static class DeckGroupEndpoints
         })
         .WithName("GetAllDeckGroups")
         .WithOpenApi();
+
+
 
         group.MapGet("/{id}", async Task<Results<Ok<DeckGroup>, NotFound>> (int deckgroupid, ApiStudyBuddyContext db) =>
         {
@@ -29,12 +32,14 @@ public static class DeckGroupEndpoints
         .WithName("GetDeckGroupById")
         .WithOpenApi();
 
+
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, DeckGroup deckGroup, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroups
                 .Where(model => model.DeckGroupId == deckgroupid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.DeckGroupId, deckGroup.DeckGroupId)
+                    .SetProperty(m => m.DeckGroupId, deckGroup.DeckGroupId)
                     .SetProperty(m => m.DeckGroupName, deckGroup.DeckGroupName)
                     .SetProperty(m => m.DeckGroupDescription, deckGroup.DeckGroupDescription)
                     );
@@ -43,14 +48,18 @@ public static class DeckGroupEndpoints
         .WithName("UpdateDeckGroup")
         .WithOpenApi();
 
+
+
         group.MapPost("/", async (DeckGroup deckGroup, ApiStudyBuddyContext db) =>
         {
             db.DeckGroups.Add(deckGroup);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DeckGroup/{deckGroup.DeckGroupId}",deckGroup);
+            return TypedResults.Created($"/api/DeckGroup/{deckGroup.DeckGroupId}", deckGroup);
         })
         .WithName("CreateDeckGroup")
         .WithOpenApi();
+
+
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, ApiStudyBuddyContext db) =>
         {

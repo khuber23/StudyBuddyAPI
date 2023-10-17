@@ -3,11 +3,12 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class DeckFlashCardEndpoints
 {
-    public static void MapDeckFlashCardEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapDeckFlashCardEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/DeckFlashCard").WithTags(nameof(DeckFlashCard));
 
@@ -17,6 +18,8 @@ public static class DeckFlashCardEndpoints
         })
         .WithName("GetAllDeckFlashCards")
         .WithOpenApi();
+
+
 
         group.MapGet("/{id}", async Task<Results<Ok<DeckFlashCard>, NotFound>> (int deckflashcardid, ApiStudyBuddyContext db) =>
         {
@@ -29,12 +32,14 @@ public static class DeckFlashCardEndpoints
         .WithName("GetDeckFlashCardById")
         .WithOpenApi();
 
+
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckflashcardid, DeckFlashCard deckFlashCard, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckFlashCards
                 .Where(model => model.DeckFlashCardId == deckflashcardid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.DeckFlashCardId, deckFlashCard.DeckFlashCardId)
+                    .SetProperty(m => m.DeckFlashCardId, deckFlashCard.DeckFlashCardId)
                     .SetProperty(m => m.DeckId, deckFlashCard.DeckId)
                     .SetProperty(m => m.FlashCardId, deckFlashCard.FlashCardId)
                     );
@@ -43,14 +48,18 @@ public static class DeckFlashCardEndpoints
         .WithName("UpdateDeckFlashCard")
         .WithOpenApi();
 
+
+
         group.MapPost("/", async (DeckFlashCard deckFlashCard, ApiStudyBuddyContext db) =>
         {
             db.DeckFlashCards.Add(deckFlashCard);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DeckFlashCard/{deckFlashCard.DeckFlashCardId}",deckFlashCard);
+            return TypedResults.Created($"/api/DeckFlashCard/{deckFlashCard.DeckFlashCardId}", deckFlashCard);
         })
         .WithName("CreateDeckFlashCard")
         .WithOpenApi();
+
+
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckflashcardid, ApiStudyBuddyContext db) =>
         {

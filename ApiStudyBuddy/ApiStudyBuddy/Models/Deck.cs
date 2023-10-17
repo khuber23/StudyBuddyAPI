@@ -1,14 +1,22 @@
-﻿namespace ApiStudyBuddy.Models
+﻿using Microsoft.OpenApi.Attributes;
+
+namespace ApiStudyBuddy.Models
 {
 	public class Deck
 	{
 		public int DeckId { get; set; }
 
+		[Display("Deck Name")]
 		public string? DeckName { get; set; }
 
+		[Display("Deck Description")]
 		public string? DeckDescription { get; set; }
 
-		public UserDeck? UserDeck { get; set; }
+
+
+
+
+		public List<UserDeck>? UserDecks { get; set; }
 
 		public List<StudySession>? StudySessions { get; set; }
 

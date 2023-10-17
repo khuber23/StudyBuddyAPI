@@ -3,11 +3,12 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class UserDeckEndpoints
 {
-    public static void MapUserDeckEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapUserDeckEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/UserDeck").WithTags(nameof(UserDeck));
 
@@ -17,6 +18,8 @@ public static class UserDeckEndpoints
         })
         .WithName("GetAllUserDecks")
         .WithOpenApi();
+
+
 
         group.MapGet("/{id}", async Task<Results<Ok<UserDeck>, NotFound>> (int userdeckid, ApiStudyBuddyContext db) =>
         {
@@ -29,23 +32,14 @@ public static class UserDeckEndpoints
         .WithName("GetUserDeckById")
         .WithOpenApi();
 
-        group.MapGet("/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
-        {
-            return await db.UserDecks.AsNoTracking()
-            .Include(model => model.User)
-            .Include(model => model.Deck)
-             .Where(model => model.UserId == userid)
-             .ToListAsync();
-        })
-        .WithName("GetUserDeckByUserId")
-        .WithOpenApi();
+
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckid, UserDeck userDeck, ApiStudyBuddyContext db) =>
         {
             var affected = await db.UserDecks
                 .Where(model => model.UserDeckId == userdeckid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.UserDeckId, userDeck.UserDeckId)
+                    .SetProperty(m => m.UserDeckId, userDeck.UserDeckId)
                     .SetProperty(m => m.UserId, userDeck.UserId)
                     .SetProperty(m => m.DeckId, userDeck.DeckId)
                     );
@@ -54,14 +48,18 @@ public static class UserDeckEndpoints
         .WithName("UpdateUserDeck")
         .WithOpenApi();
 
+
+
         group.MapPost("/", async (UserDeck userDeck, ApiStudyBuddyContext db) =>
         {
             db.UserDecks.Add(userDeck);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/UserDeck/{userDeck.UserDeckId}",userDeck);
+            return TypedResults.Created($"/api/UserDeck/{userDeck.UserDeckId}", userDeck);
         })
         .WithName("CreateUserDeck")
         .WithOpenApi();
+
+
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int userdeckid, ApiStudyBuddyContext db) =>
         {

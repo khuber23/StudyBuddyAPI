@@ -17,7 +17,7 @@ namespace ApiStudyBuddy.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,26 +39,6 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("DeckId");
 
                     b.ToTable("Decks");
-
-                    b.HasData(
-                        new
-                        {
-                            DeckId = 1,
-                            DeckDescription = "Design patterns all about class instantiation",
-                            DeckName = "Creational Design Patterns"
-                        },
-                        new
-                        {
-                            DeckId = 2,
-                            DeckDescription = "Design patterns all about class and Object composition",
-                            DeckName = "Structural Design Patterns"
-                        },
-                        new
-                        {
-                            DeckId = 3,
-                            DeckDescription = "Design patterns all about Class's objects communication",
-                            DeckName = "Behavorial Design Patterns"
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
@@ -79,42 +59,9 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.HasIndex("FlashCardId")
-                        .IsUnique();
+                    b.HasIndex("FlashCardId");
 
                     b.ToTable("DeckFlashCards");
-
-                    b.HasData(
-                        new
-                        {
-                            DeckFlashCardId = 1,
-                            DeckId = 1,
-                            FlashCardId = 1
-                        },
-                        new
-                        {
-                            DeckFlashCardId = 2,
-                            DeckId = 1,
-                            FlashCardId = 2
-                        },
-                        new
-                        {
-                            DeckFlashCardId = 3,
-                            DeckId = 2,
-                            FlashCardId = 3
-                        },
-                        new
-                        {
-                            DeckFlashCardId = 4,
-                            DeckId = 2,
-                            FlashCardId = 4
-                        },
-                        new
-                        {
-                            DeckFlashCardId = 5,
-                            DeckId = 3,
-                            FlashCardId = 5
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroup", b =>
@@ -134,14 +81,6 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("DeckGroupId");
 
                     b.ToTable("DeckGroups");
-
-                    b.HasData(
-                        new
-                        {
-                            DeckGroupId = 1,
-                            DeckGroupDescription = "Solutions to commonly occurring problems in software design.",
-                            DeckGroupName = "Design Patterns"
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
@@ -160,32 +99,11 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("DeckGroupDeckId");
 
-                    b.HasIndex("DeckGroupId")
-                        .IsUnique();
+                    b.HasIndex("DeckGroupId");
 
                     b.HasIndex("DeckId");
 
                     b.ToTable("DeckGroupDecks");
-
-                    b.HasData(
-                        new
-                        {
-                            DeckGroupDeckId = 1,
-                            DeckGroupId = 1,
-                            DeckId = 1
-                        },
-                        new
-                        {
-                            DeckGroupDeckId = 2,
-                            DeckGroupId = 1,
-                            DeckId = 2
-                        },
-                        new
-                        {
-                            DeckGroupDeckId = 3,
-                            DeckGroupId = 1,
-                            DeckId = 3
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
@@ -199,44 +117,26 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("FlashCardAnswer")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FlashCardAnswerImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FlashCardQuestion")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FlashCardQuestionImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("StudySessionFlashCardId")
+                        .HasColumnType("int");
+
                     b.HasKey("FlashCardId");
 
-                    b.ToTable("FlashCards");
+                    b.HasIndex("StudySessionFlashCardId");
 
-                    b.HasData(
-                        new
-                        {
-                            FlashCardId = 1,
-                            FlashCardAnswer = "Creates an instance of several families of classes",
-                            FlashCardQuestion = "What is abstract factory"
-                        },
-                        new
-                        {
-                            FlashCardId = 2,
-                            FlashCardAnswer = "A class of which only a single instance can exist",
-                            FlashCardQuestion = "What is Singleton?"
-                        },
-                        new
-                        {
-                            FlashCardId = 3,
-                            FlashCardAnswer = "Add responsibilites to objects dynamically",
-                            FlashCardQuestion = "What is decorator?"
-                        },
-                        new
-                        {
-                            FlashCardId = 4,
-                            FlashCardAnswer = "A single class that represents an entire subsystem",
-                            FlashCardQuestion = "What is facade?"
-                        },
-                        new
-                        {
-                            FlashCardId = 5,
-                            FlashCardAnswer = "Sequentially access the elements of a collection",
-                            FlashCardQuestion = "What is iterator?"
-                        });
+                    b.ToTable("FlashCards");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
@@ -247,14 +147,17 @@ namespace ApiStudyBuddy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudySessionId"));
 
-                    b.Property<int>("DeckGroupId")
+                    b.Property<int?>("DeckGroupId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeckId")
+                    b.Property<int?>("DeckId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -271,17 +174,6 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("StudySessions");
-
-                    b.HasData(
-                        new
-                        {
-                            StudySessionId = 1,
-                            DeckGroupId = 1,
-                            DeckId = 1,
-                            EndTime = new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified),
-                            StartTime = new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified),
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
@@ -292,39 +184,14 @@ namespace ApiStudyBuddy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudySessionFlashCardId"));
 
-                    b.Property<int>("FlashCardId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StudySessionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("WasCorrect")
-                        .HasColumnType("bit");
-
                     b.HasKey("StudySessionFlashCardId");
-
-                    b.HasIndex("FlashCardId")
-                        .IsUnique();
 
                     b.HasIndex("StudySessionId");
 
                     b.ToTable("StudySessionsFlashCards");
-
-                    b.HasData(
-                        new
-                        {
-                            StudySessionFlashCardId = 1,
-                            FlashCardId = 1,
-                            StudySessionId = 1,
-                            WasCorrect = true
-                        },
-                        new
-                        {
-                            StudySessionFlashCardId = 2,
-                            FlashCardId = 2,
-                            StudySessionId = 1,
-                            WasCorrect = false
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.User", b =>
@@ -344,8 +211,11 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -355,35 +225,6 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Email = "JohnDoe@gmail.com",
-                            FirstName = "John",
-                            LastName = "Doe",
-                            Password = "1234",
-                            Username = "JDoe1"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Email = "MaryJane@gmail.com",
-                            FirstName = "Mary",
-                            LastName = "Jane",
-                            Password = "4321",
-                            Username = "MJane1"
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            Email = "kayla.huber23@gmail.com",
-                            FirstName = "Kayla",
-                            LastName = "Huber",
-                            Password = "Kitkat23!",
-                            Username = "Khuber"
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeck", b =>
@@ -402,32 +243,11 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("UserDeckId");
 
-                    b.HasIndex("DeckId")
-                        .IsUnique();
+                    b.HasIndex("DeckId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDecks");
-
-                    b.HasData(
-                        new
-                        {
-                            UserDeckId = 1,
-                            DeckId = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            UserDeckId = 2,
-                            DeckId = 2,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            UserDeckId = 3,
-                            DeckId = 3,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeckGroup", b =>
@@ -446,142 +266,104 @@ namespace ApiStudyBuddy.Migrations
 
                     b.HasKey("UserDeckGroupId");
 
-                    b.HasIndex("DeckGroupId")
-                        .IsUnique();
+                    b.HasIndex("DeckGroupId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDeckGroups");
-
-                    b.HasData(
-                        new
-                        {
-                            UserDeckGroupId = 1,
-                            DeckGroupId = 1,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
                 {
-                    b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
+                    b.HasOne("ApiStudyBuddy.Models.Deck", null)
                         .WithMany("DeckFlashCards")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
-                        .WithOne("DeckFlashCard")
-                        .HasForeignKey("ApiStudyBuddy.Models.DeckFlashCard", "FlashCardId")
+                    b.HasOne("ApiStudyBuddy.Models.FlashCard", null)
+                        .WithMany("DeckFlashCard")
+                        .HasForeignKey("FlashCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Deck");
-
-                    b.Navigation("FlashCard");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
                 {
-                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
-                        .WithOne("DeckGroupDeck")
-                        .HasForeignKey("ApiStudyBuddy.Models.DeckGroupDeck", "DeckGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
+                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", null)
                         .WithMany("DeckGroupDecks")
-                        .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Deck");
-
-                    b.Navigation("DeckGroup");
-                });
-
-            modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
-                {
-                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
-                        .WithMany("StudySessions")
                         .HasForeignKey("DeckGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
-                        .WithMany("StudySessions")
+                    b.HasOne("ApiStudyBuddy.Models.Deck", null)
+                        .WithMany("DeckGroupDecks")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("ApiStudyBuddy.Models.User", "User")
+            modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
+                {
+                    b.HasOne("ApiStudyBuddy.Models.StudySessionFlashCard", null)
+                        .WithMany("FlashCards")
+                        .HasForeignKey("StudySessionFlashCardId");
+                });
+
+            modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
+                {
+                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", null)
+                        .WithMany("StudySessions")
+                        .HasForeignKey("DeckGroupId");
+
+                    b.HasOne("ApiStudyBuddy.Models.Deck", null)
+                        .WithMany("StudySessions")
+                        .HasForeignKey("DeckId");
+
+                    b.HasOne("ApiStudyBuddy.Models.User", null)
                         .WithMany("StudySessions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Deck");
-
-                    b.Navigation("DeckGroup");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
                 {
-                    b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
-                        .WithOne("StudySessionFlashCard")
-                        .HasForeignKey("ApiStudyBuddy.Models.StudySessionFlashCard", "FlashCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApiStudyBuddy.Models.StudySession", "StudySession")
+                    b.HasOne("ApiStudyBuddy.Models.StudySession", null)
                         .WithMany("StudySessionFlashCards")
                         .HasForeignKey("StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("FlashCard");
-
-                    b.Navigation("StudySession");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeck", b =>
                 {
-                    b.HasOne("ApiStudyBuddy.Models.Deck", "Deck")
-                        .WithOne("UserDeck")
-                        .HasForeignKey("ApiStudyBuddy.Models.UserDeck", "DeckId")
+                    b.HasOne("ApiStudyBuddy.Models.Deck", null)
+                        .WithMany("UserDecks")
+                        .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiStudyBuddy.Models.User", "User")
+                    b.HasOne("ApiStudyBuddy.Models.User", null)
                         .WithMany("UserDecks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Deck");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeckGroup", b =>
                 {
-                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", "DeckGroup")
-                        .WithOne("UserDeckGroup")
-                        .HasForeignKey("ApiStudyBuddy.Models.UserDeckGroup", "DeckGroupId")
+                    b.HasOne("ApiStudyBuddy.Models.DeckGroup", null)
+                        .WithMany("UserDeckGroups")
+                        .HasForeignKey("DeckGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiStudyBuddy.Models.User", "User")
+                    b.HasOne("ApiStudyBuddy.Models.User", null)
                         .WithMany("UserDeckGroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DeckGroup");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.Deck", b =>
@@ -592,28 +374,31 @@ namespace ApiStudyBuddy.Migrations
 
                     b.Navigation("StudySessions");
 
-                    b.Navigation("UserDeck");
+                    b.Navigation("UserDecks");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroup", b =>
                 {
-                    b.Navigation("DeckGroupDeck");
+                    b.Navigation("DeckGroupDecks");
 
                     b.Navigation("StudySessions");
 
-                    b.Navigation("UserDeckGroup");
+                    b.Navigation("UserDeckGroups");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
                 {
                     b.Navigation("DeckFlashCard");
-
-                    b.Navigation("StudySessionFlashCard");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
                 {
                     b.Navigation("StudySessionFlashCards");
+                });
+
+            modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
+                {
+                    b.Navigation("FlashCards");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.User", b =>
