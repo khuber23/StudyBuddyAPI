@@ -14,7 +14,10 @@ public static class DeckFlashCardEndpoints
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.DeckFlashCards.ToListAsync();
+            return await db.DeckFlashCards
+            .Include(x => x.Deck)
+            .Include(x => x.FlashCard)
+            .ToListAsync();
         })
         .WithName("GetAllDeckFlashCards")
         .WithOpenApi();

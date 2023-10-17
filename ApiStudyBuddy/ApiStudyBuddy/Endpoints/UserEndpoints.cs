@@ -14,7 +14,11 @@ public static class UserEndpoints
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.Users.ToListAsync();
+            return await db.Users
+            .Include(x => x.StudySessions)
+            .Include(x => x.UserDeckGroups)
+            .Include(x => x.UserDecks)
+            .ToListAsync();
         })
         .WithName("GetAllUsers")
         .WithOpenApi();

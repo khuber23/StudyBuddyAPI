@@ -14,7 +14,12 @@ public static class DeckEndpoints
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.Decks.ToListAsync();
+            return await db.Decks
+            .Include(x => x.DeckGroupDecks)
+            .Include(x => x.DeckFlashCards)
+            .Include(x => x.StudySessions)
+            .Include(x => x.UserDecks)
+            .ToListAsync();
         })
         .WithName("GetAllDecks")
         .WithOpenApi();

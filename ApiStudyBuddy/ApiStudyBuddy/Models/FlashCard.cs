@@ -11,9 +11,10 @@
 		public string? FlashCardAnswer { get; set; }
 		public string? FlashCardAnswerImage { get; set; }
 
-        public bool IsCorrect { get; set; }
 
 
-        public List<DeckFlashCard>? DeckFlashCard { get; set; }
+		public List<StudySessionFlashCard>? SessionFlashCards { get; set; }
+
+        public List<DeckFlashCard>? DeckFlashCards { get; set; }
 	}
 }

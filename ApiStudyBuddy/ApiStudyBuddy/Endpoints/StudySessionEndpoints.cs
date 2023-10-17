@@ -14,7 +14,12 @@ public static class StudySessionEndpoints
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.StudySessions.ToListAsync();
+            return await db.StudySessions
+            .Include(x => x.DeckGroup)
+            .Include(x => x.Deck)
+            .Include(x => x.User)
+            .Include(x => x.StudySessionFlashCards)
+            .ToListAsync();
         })
         .WithName("GetAllStudySessions")
         .WithOpenApi();

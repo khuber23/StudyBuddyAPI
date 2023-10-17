@@ -9,5 +9,9 @@ namespace ApiStudyBuddy.Models
 		public int DeckId { get; set; }
 
 		public int FlashCardId { get; set; }
+
+		public Deck? Deck { get; set; }
+
+		public FlashCard? FlashCard { get; set; }
 	}
 }

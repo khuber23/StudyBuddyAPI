@@ -18,6 +18,12 @@
 
 		public int UserId { get; set; }
 
+		public DeckGroup? DeckGroup { get; set; }
+
+		public Deck? Deck { get; set; }
+
+		public User? User { get; set; }
+
 		public List<StudySessionFlashCard>? StudySessionFlashCards { get; set; }
 	}
 }

@@ -40,6 +40,22 @@ namespace ApiStudyBuddy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FlashCards",
+                columns: table => new
+                {
+                    FlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FlashCardQuestion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FlashCardQuestionImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FlashCardAnswerImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FlashCards", x => x.FlashCardId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -80,6 +96,32 @@ namespace ApiStudyBuddy.Migrations
                         column: x => x.DeckId,
                         principalTable: "Decks",
                         principalColumn: "DeckId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeckFlashCards",
+                columns: table => new
+                {
+                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeckId = table.Column<int>(type: "int", nullable: false),
+                    FlashCardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeckFlashCards", x => x.DeckFlashCardId);
+                    table.ForeignKey(
+                        name: "FK_DeckFlashCards_Decks_DeckId",
+                        column: x => x.DeckId,
+                        principalTable: "Decks",
+                        principalColumn: "DeckId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DeckFlashCards_FlashCards_FlashCardId",
+                        column: x => x.FlashCardId,
+                        principalTable: "FlashCards",
+                        principalColumn: "FlashCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -175,65 +217,24 @@ namespace ApiStudyBuddy.Migrations
                 {
                     StudySessionFlashCardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudySessionId = table.Column<int>(type: "int", nullable: false)
+                    StudySessionId = table.Column<int>(type: "int", nullable: false),
+                    FlashCardId = table.Column<int>(type: "int", nullable: false),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StudySessionsFlashCards", x => x.StudySessionFlashCardId);
                     table.ForeignKey(
+                        name: "FK_StudySessionsFlashCards_FlashCards_FlashCardId",
+                        column: x => x.FlashCardId,
+                        principalTable: "FlashCards",
+                        principalColumn: "FlashCardId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_StudySessionsFlashCards_StudySessions_StudySessionId",
                         column: x => x.StudySessionId,
                         principalTable: "StudySessions",
                         principalColumn: "StudySessionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FlashCards",
-                columns: table => new
-                {
-                    FlashCardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FlashCardQuestion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlashCardQuestionImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlashCardAnswerImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    StudySessionFlashCardId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FlashCards", x => x.FlashCardId);
-                    table.ForeignKey(
-                        name: "FK_FlashCards_StudySessionsFlashCards_StudySessionFlashCardId",
-                        column: x => x.StudySessionFlashCardId,
-                        principalTable: "StudySessionsFlashCards",
-                        principalColumn: "StudySessionFlashCardId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeckFlashCards",
-                columns: table => new
-                {
-                    DeckFlashCardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeckId = table.Column<int>(type: "int", nullable: false),
-                    FlashCardId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeckFlashCards", x => x.DeckFlashCardId);
-                    table.ForeignKey(
-                        name: "FK_DeckFlashCards_Decks_DeckId",
-                        column: x => x.DeckId,
-                        principalTable: "Decks",
-                        principalColumn: "DeckId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DeckFlashCards_FlashCards_FlashCardId",
-                        column: x => x.FlashCardId,
-                        principalTable: "FlashCards",
-                        principalColumn: "FlashCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -258,11 +259,6 @@ namespace ApiStudyBuddy.Migrations
                 column: "DeckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlashCards_StudySessionFlashCardId",
-                table: "FlashCards",
-                column: "StudySessionFlashCardId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StudySessions_DeckGroupId",
                 table: "StudySessions",
                 column: "DeckGroupId");
@@ -276,6 +272,11 @@ namespace ApiStudyBuddy.Migrations
                 name: "IX_StudySessions_UserId",
                 table: "StudySessions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudySessionsFlashCards_FlashCardId",
+                table: "StudySessionsFlashCards",
+                column: "FlashCardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudySessionsFlashCards_StudySessionId",
@@ -313,6 +314,9 @@ namespace ApiStudyBuddy.Migrations
                 name: "DeckGroupDecks");
 
             migrationBuilder.DropTable(
+                name: "StudySessionsFlashCards");
+
+            migrationBuilder.DropTable(
                 name: "UserDeckGroups");
 
             migrationBuilder.DropTable(
@@ -320,9 +324,6 @@ namespace ApiStudyBuddy.Migrations
 
             migrationBuilder.DropTable(
                 name: "FlashCards");
-
-            migrationBuilder.DropTable(
-                name: "StudySessionsFlashCards");
 
             migrationBuilder.DropTable(
                 name: "StudySessions");

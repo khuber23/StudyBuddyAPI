@@ -14,7 +14,10 @@ public static class StudySessionFlashCardEndpoints
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.StudySessionsFlashCards.ToListAsync();
+            return await db.StudySessionsFlashCards
+            .Include(x => x.StudySession)
+            .Include(x => x.FlashCard)
+            .ToListAsync();
         })
         .WithName("GetAllStudySessionFlashCards")
         .WithOpenApi();
@@ -41,6 +44,7 @@ public static class StudySessionFlashCardEndpoints
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(m => m.StudySessionFlashCardId, studySessionFlashCard.StudySessionFlashCardId)
                     .SetProperty(m => m.StudySessionId, studySessionFlashCard.StudySessionId)
+                    .SetProperty(m => m.IsCorrect, studySessionFlashCard.IsCorrect)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

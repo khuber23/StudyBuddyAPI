@@ -6,6 +6,14 @@
 
 		public int StudySessionId { get; set; }
 
-		public List<FlashCard>? FlashCards { get; set; }
+		public int FlashCardId { get; set; }
+
+		public bool IsCorrect { get; set; }
+
+
+
+		public StudySession? StudySession { get; set; }
+
+		public FlashCard FlashCard { get; set; }
 	}
 }
