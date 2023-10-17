@@ -35,7 +35,33 @@ public static class UserDeckGroupEndpoints
         .WithName("GetUserDeckGroupById")
         .WithOpenApi();
 
+        //full userDeckGroup for maui, gets literally all/most of the info needed.
+        group.MapGet("maui/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups.AsNoTracking()
+            .Include(model => model.User)
+            .Include(model => model.DeckGroup)
+            .ThenInclude(model => model.DeckGroupDeck)
+            .ThenInclude(model => model.Deck)
+            .ThenInclude(model => model.DeckFlashCards)
+            .ThenInclude(model => model.FlashCard)
+            .Where(model => model.UserId == userid)
+            .ToListAsync();
+        })
+        .WithName("GetMauiFullUserDeckGroupByUserId")
+        .WithOpenApi();
 
+        //basically just gets deckgroup and not all the stuff with it...mostly used for the MAUI DeckGroup page.
+        group.MapGet("maui/deckgroup/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups.AsNoTracking()
+            .Include(model => model.User)
+            .Include(model => model.DeckGroup)
+            .Where(model => model.UserId == userid)
+            .ToListAsync();
+        })
+       .WithName("GetMauiOnlyUserDeckGroupByUserId")
+       .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckgroupid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
         {

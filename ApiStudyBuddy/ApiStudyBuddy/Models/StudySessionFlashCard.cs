@@ -14,6 +14,6 @@
 
 		public StudySession? StudySession { get; set; }
 
-		public FlashCard FlashCard { get; set; }
+		public FlashCard? FlashCard { get; set; }
 	}
 }

@@ -21,5 +21,7 @@ namespace ApiStudyBuddy.Models
 		public List<UserDeckGroup>? UserDeckGroups { get; set; }
 
 		public List<DeckGroupDeck>? DeckGroupDecks { get; set; }
+
+		public DeckGroupDeck? DeckGroupDeck { get; set; }
 	}
 }

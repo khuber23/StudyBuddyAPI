@@ -35,7 +35,53 @@ public static class StudySessionFlashCardEndpoints
         .WithName("GetStudySessionFlashCardById")
         .WithOpenApi();
 
+        group.MapGet("maui/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+             .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid)
+            .ToListAsync();
+        })
+      .WithName("GetMauiFullStudySessionFlashCardsByUserId")
+      .WithOpenApi();
 
+        group.MapGet("/maui/correct/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid && model.IsCorrect == true)
+            .ToListAsync();
+        })
+      .WithName("GetMauiCorrectStudySessionFlashCardsByUserId")
+      .WithOpenApi();
+
+        group.MapGet("/maui/incorrect/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessionsFlashCards.AsNoTracking()
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.User)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.DeckGroup)
+            .Include(model => model.StudySession)
+            .ThenInclude(model => model.Deck)
+            .Include(model => model.FlashCard)
+            .Where(model => model.StudySession.UserId == userid && model.IsCorrect == false)
+            .ToListAsync();
+        })
+     .WithName("GetMauiIncorrectStudySessionFlashCardsByUserId")
+     .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionflashcardid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
         {

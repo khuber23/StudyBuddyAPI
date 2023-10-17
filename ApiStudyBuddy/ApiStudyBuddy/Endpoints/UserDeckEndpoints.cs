@@ -35,7 +35,20 @@ public static class UserDeckEndpoints
         .WithName("GetUserDeckById")
         .WithOpenApi();
 
-
+        //maui endpoint for just retrieving userDecks and includes user, deck, and deckflashcards
+        group.MapGet("maui/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDecks.AsNoTracking()
+            .Include(model => model.User)
+            .Include(model => model.Deck)
+            .ThenInclude(model => model.DeckFlashCards)
+            //don't know if this part of it works but will see later
+            .ThenInclude(model => model.FlashCard)
+             .Where(model => model.UserId == userid)
+             .ToListAsync();
+        })
+        .WithName("GetMauiUserDeckByUserId")
+        .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckid, UserDeck userDeck, ApiStudyBuddyContext db) =>
         {
