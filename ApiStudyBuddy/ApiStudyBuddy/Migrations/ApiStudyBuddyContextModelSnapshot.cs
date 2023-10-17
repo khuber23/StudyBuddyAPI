@@ -126,6 +126,9 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("FlashCardQuestionImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.HasKey("FlashCardId");
 
                     b.ToTable("FlashCards");
@@ -207,6 +210,9 @@ namespace ApiStudyBuddy.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

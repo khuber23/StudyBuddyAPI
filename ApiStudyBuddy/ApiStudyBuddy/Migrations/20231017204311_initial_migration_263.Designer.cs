@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20231017203528_initial_migration")]
-    partial class initial_migration
+    [Migration("20231017204311_initial_migration_263")]
+    partial class initial_migration_263
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,9 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("FlashCardQuestionImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.HasKey("FlashCardId");
 
                     b.ToTable("FlashCards");
@@ -210,6 +213,9 @@ namespace ApiStudyBuddy.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
