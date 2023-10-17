@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiStudyBuddy.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_migration : Migration
+    public partial class initial_migration_263 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,7 +48,8 @@ namespace ApiStudyBuddy.Migrations
                     FlashCardQuestion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FlashCardQuestionImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlashCardAnswerImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FlashCardAnswerImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +67,8 @@ namespace ApiStudyBuddy.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

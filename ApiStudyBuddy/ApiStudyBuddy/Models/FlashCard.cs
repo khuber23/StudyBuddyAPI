@@ -11,7 +11,7 @@
 		public string? FlashCardAnswer { get; set; }
 		public string? FlashCardAnswerImage { get; set; }
 
-
+		public bool IsPublic { get; set; }
 
 		public List<StudySessionFlashCard>? SessionFlashCards { get; set; }
 

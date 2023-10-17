@@ -21,6 +21,8 @@ namespace ApiStudyBuddy.Models
 
 		public string? ProfilePicture { get; set; }
 
+		public bool IsAdmin { get; set; }
+
 		public List<UserDeck>? UserDecks { get; set; }
 
 		public List<UserDeckGroup>? UserDeckGroups { get; set; }
