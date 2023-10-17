@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20231017194005_initial_migration")]
+    [Migration("20231017203528_initial_migration")]
     partial class initial_migration
     {
         /// <inheritdoc />
