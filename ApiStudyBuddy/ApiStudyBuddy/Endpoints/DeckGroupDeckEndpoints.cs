@@ -22,6 +22,17 @@ public static class DeckGroupDeckEndpoints
         .WithName("GetAllDeckGroupDecks")
         .WithOpenApi();
 
+        group.MapGet("/maui/{deckgroupid}", async (int deckgroupid, ApiStudyBuddyContext db) =>
+        {
+            return await db.DeckGroupDecks.AsNoTracking()
+            .Include(model => model.DeckGroup)
+            .Include(model => model.Deck)
+            .Where(model => model.DeckGroupId == deckgroupid)
+            .ToListAsync();
+        })
+      .WithName("GetmauiDeckGroupDeckByDeckGroupId")
+      .WithOpenApi();
+
         group.MapGet("/{id}", async Task<Results<Ok<DeckGroupDeck>, NotFound>> (int deckgroupdeckid, ApiStudyBuddyContext db) =>
         {
             return await db.DeckGroupDecks.AsNoTracking()
