@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20231017204311_initial_migration_263")]
-    partial class initial_migration_263
+    [Migration("20231018002140_intialMigration")]
+    partial class intialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,26 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("DeckId");
 
                     b.ToTable("Decks");
+
+                    b.HasData(
+                        new
+                        {
+                            DeckId = 1,
+                            DeckDescription = "Design patterns all about class instantiation",
+                            DeckName = "Creational Design Patterns"
+                        },
+                        new
+                        {
+                            DeckId = 2,
+                            DeckDescription = "Design patterns all about class and Object composition",
+                            DeckName = "Structural Design Patterns"
+                        },
+                        new
+                        {
+                            DeckId = 3,
+                            DeckDescription = "Design patterns all about Class's objects communication",
+                            DeckName = "Behavorial Design Patterns"
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
@@ -65,6 +85,38 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("FlashCardId");
 
                     b.ToTable("DeckFlashCards");
+
+                    b.HasData(
+                        new
+                        {
+                            DeckFlashCardId = 1,
+                            DeckId = 1,
+                            FlashCardId = 1
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 2,
+                            DeckId = 1,
+                            FlashCardId = 2
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 3,
+                            DeckId = 2,
+                            FlashCardId = 3
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 4,
+                            DeckId = 2,
+                            FlashCardId = 4
+                        },
+                        new
+                        {
+                            DeckFlashCardId = 5,
+                            DeckId = 3,
+                            FlashCardId = 5
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroup", b =>
@@ -84,6 +136,14 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("DeckGroupId");
 
                     b.ToTable("DeckGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            DeckGroupId = 1,
+                            DeckGroupDescription = "Solutions to commonly occurring problems in software design.",
+                            DeckGroupName = "Design Patterns"
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
@@ -107,6 +167,26 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("DeckGroupDecks");
+
+                    b.HasData(
+                        new
+                        {
+                            DeckGroupDeckId = 1,
+                            DeckGroupId = 1,
+                            DeckId = 1
+                        },
+                        new
+                        {
+                            DeckGroupDeckId = 2,
+                            DeckGroupId = 1,
+                            DeckId = 2
+                        },
+                        new
+                        {
+                            DeckGroupDeckId = 3,
+                            DeckGroupId = 1,
+                            DeckId = 3
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.FlashCard", b =>
@@ -135,6 +215,43 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("FlashCardId");
 
                     b.ToTable("FlashCards");
+
+                    b.HasData(
+                        new
+                        {
+                            FlashCardId = 1,
+                            FlashCardAnswer = "Creates an instance of several families of classes",
+                            FlashCardQuestion = "What is abstract factory",
+                            IsPublic = true
+                        },
+                        new
+                        {
+                            FlashCardId = 2,
+                            FlashCardAnswer = "A class of which only a single instance can exist",
+                            FlashCardQuestion = "What is Singleton?",
+                            IsPublic = true
+                        },
+                        new
+                        {
+                            FlashCardId = 3,
+                            FlashCardAnswer = "Add responsibilites to objects dynamically",
+                            FlashCardQuestion = "What is decorator?",
+                            IsPublic = true
+                        },
+                        new
+                        {
+                            FlashCardId = 4,
+                            FlashCardAnswer = "A single class that represents an entire subsystem",
+                            FlashCardQuestion = "What is facade?",
+                            IsPublic = true
+                        },
+                        new
+                        {
+                            FlashCardId = 5,
+                            FlashCardAnswer = "Sequentially access the elements of a collection",
+                            FlashCardQuestion = "What is iterator?",
+                            IsPublic = true
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>
@@ -172,6 +289,18 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("StudySessions");
+
+                    b.HasData(
+                        new
+                        {
+                            StudySessionId = 1,
+                            DeckGroupId = 1,
+                            DeckId = 1,
+                            EndTime = new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified),
+                            IsCompleted = false,
+                            StartTime = new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified),
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
@@ -198,6 +327,22 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("StudySessionId");
 
                     b.ToTable("StudySessionsFlashCards");
+
+                    b.HasData(
+                        new
+                        {
+                            StudySessionFlashCardId = 1,
+                            FlashCardId = 1,
+                            IsCorrect = true,
+                            StudySessionId = 1
+                        },
+                        new
+                        {
+                            StudySessionFlashCardId = 2,
+                            FlashCardId = 2,
+                            IsCorrect = false,
+                            StudySessionId = 1
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.User", b =>
@@ -234,6 +379,28 @@ namespace ApiStudyBuddy.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Email = "JohnDoe@gmail.com",
+                            FirstName = "John",
+                            IsAdmin = false,
+                            LastName = "Doe",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHkNcdcydJ6lCgu6hPLEdV8CezbujT87yOO2nMMXwe71pTX+CdelWp6WHAD+hNGN3w==",
+                            Username = "JDoe1"
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Email = "MaryJane@gmail.com",
+                            FirstName = "Mary",
+                            IsAdmin = false,
+                            LastName = "Jane",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFCYkHw0hLhF5AiysQpkKd5Y1DBCL0iJgPA/dQtXBzrbyuCHNqZOh8Db9rAZg1DrsA==",
+                            Username = "MJane1"
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeck", b =>
@@ -257,6 +424,26 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDecks");
+
+                    b.HasData(
+                        new
+                        {
+                            UserDeckId = 1,
+                            DeckId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            UserDeckId = 2,
+                            DeckId = 2,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            UserDeckId = 3,
+                            DeckId = 3,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeckGroup", b =>
@@ -280,6 +467,14 @@ namespace ApiStudyBuddy.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDeckGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            UserDeckGroupId = 1,
+                            DeckGroupId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>

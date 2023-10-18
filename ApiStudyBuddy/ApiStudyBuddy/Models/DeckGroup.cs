@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Attributes;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.OpenApi.Attributes;
 
 namespace ApiStudyBuddy.Models
 {
@@ -12,16 +13,10 @@ namespace ApiStudyBuddy.Models
 		[Display("Deck Group Description")]
 		public string? DeckGroupDescription { get; set; }
 
-
-
-
-
 		public List<StudySession>? StudySessions { get; set; }
 
 		public List<UserDeckGroup>? UserDeckGroups { get; set; }
 
 		public List<DeckGroupDeck>? DeckGroupDecks { get; set; }
-
-		public DeckGroupDeck? DeckGroupDeck { get; set; }
 	}
 }

@@ -41,7 +41,7 @@ public static class UserDeckGroupEndpoints
             return await db.UserDeckGroups.AsNoTracking()
             .Include(model => model.User)
             .Include(model => model.DeckGroup)
-            .ThenInclude(model => model.DeckGroupDeck)
+            .ThenInclude(model => model.DeckGroupDecks)
             .ThenInclude(model => model.Deck)
             .ThenInclude(model => model.DeckFlashCards)
             .ThenInclude(model => model.FlashCard)

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ApiStudyBuddy.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_migration_263 : Migration
+    public partial class intialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -238,6 +240,93 @@ namespace ApiStudyBuddy.Migrations
                         principalTable: "StudySessions",
                         principalColumn: "StudySessionId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "DeckGroups",
+                columns: new[] { "DeckGroupId", "DeckGroupDescription", "DeckGroupName" },
+                values: new object[] { 1, "Solutions to commonly occurring problems in software design.", "Design Patterns" });
+
+            migrationBuilder.InsertData(
+                table: "Decks",
+                columns: new[] { "DeckId", "DeckDescription", "DeckName" },
+                values: new object[,]
+                {
+                    { 1, "Design patterns all about class instantiation", "Creational Design Patterns" },
+                    { 2, "Design patterns all about class and Object composition", "Structural Design Patterns" },
+                    { 3, "Design patterns all about Class's objects communication", "Behavorial Design Patterns" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FlashCards",
+                columns: new[] { "FlashCardId", "FlashCardAnswer", "FlashCardAnswerImage", "FlashCardQuestion", "FlashCardQuestionImage", "IsPublic" },
+                values: new object[,]
+                {
+                    { 1, "Creates an instance of several families of classes", null, "What is abstract factory", null, true },
+                    { 2, "A class of which only a single instance can exist", null, "What is Singleton?", null, true },
+                    { 3, "Add responsibilites to objects dynamically", null, "What is decorator?", null, true },
+                    { 4, "A single class that represents an entire subsystem", null, "What is facade?", null, true },
+                    { 5, "Sequentially access the elements of a collection", null, "What is iterator?", null, true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Email", "FirstName", "IsAdmin", "LastName", "PasswordHash", "ProfilePicture", "Username" },
+                values: new object[,]
+                {
+                    { 1, "JohnDoe@gmail.com", "John", false, "Doe", "AQAAAAIAAYagAAAAEHkNcdcydJ6lCgu6hPLEdV8CezbujT87yOO2nMMXwe71pTX+CdelWp6WHAD+hNGN3w==", null, "JDoe1" },
+                    { 2, "MaryJane@gmail.com", "Mary", false, "Jane", "AQAAAAIAAYagAAAAEFCYkHw0hLhF5AiysQpkKd5Y1DBCL0iJgPA/dQtXBzrbyuCHNqZOh8Db9rAZg1DrsA==", null, "MJane1" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DeckFlashCards",
+                columns: new[] { "DeckFlashCardId", "DeckId", "FlashCardId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 1, 2 },
+                    { 3, 2, 3 },
+                    { 4, 2, 4 },
+                    { 5, 3, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DeckGroupDecks",
+                columns: new[] { "DeckGroupDeckId", "DeckGroupId", "DeckId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 1, 2 },
+                    { 3, 1, 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StudySessions",
+                columns: new[] { "StudySessionId", "DeckGroupId", "DeckId", "EndTime", "IsCompleted", "StartTime", "UserId" },
+                values: new object[] { 1, 1, 1, new DateTime(2023, 9, 11, 15, 35, 15, 0, DateTimeKind.Unspecified), false, new DateTime(2023, 9, 11, 15, 5, 15, 0, DateTimeKind.Unspecified), 1 });
+
+            migrationBuilder.InsertData(
+                table: "UserDeckGroups",
+                columns: new[] { "UserDeckGroupId", "DeckGroupId", "UserId" },
+                values: new object[] { 1, 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "UserDecks",
+                columns: new[] { "UserDeckId", "DeckId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 2, 1 },
+                    { 3, 3, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StudySessionsFlashCards",
+                columns: new[] { "StudySessionFlashCardId", "FlashCardId", "IsCorrect", "StudySessionId" },
+                values: new object[,]
+                {
+                    { 1, 1, true, 1 },
+                    { 2, 2, false, 1 }
                 });
 
             migrationBuilder.CreateIndex(
