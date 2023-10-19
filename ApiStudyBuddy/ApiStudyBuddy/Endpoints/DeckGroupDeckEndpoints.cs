@@ -27,6 +27,8 @@ public static class DeckGroupDeckEndpoints
             return await db.DeckGroupDecks.AsNoTracking()
             .Include(model => model.DeckGroup)
             .Include(model => model.Deck)
+            .ThenInclude(model => model.DeckFlashCards)
+            .ThenInclude(model => model.FlashCard)
             .Where(model => model.DeckGroupId == deckgroupid)
             .ToListAsync();
         })
