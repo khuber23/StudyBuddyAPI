@@ -21,8 +21,18 @@ public static class UserEndpoints
         .WithOpenApi();
 
 
+		group.MapGet("/MVC/User", async Task<Results<Ok<User>, NotFound>> (string username ,ApiStudyBuddyContext db) =>
+		{
+			return await db.Users.AsNoTracking()
+				.FirstOrDefaultAsync(model => model.Username == username)
+				is User model
+					? TypedResults.Ok(model)
+					: TypedResults.NotFound();
+		})
+		.WithName("GetUserByUsername")
+		.WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<User>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
+		group.MapGet("/{id}", async Task<Results<Ok<User>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.Users.AsNoTracking()
                 .FirstOrDefaultAsync(model => model.UserId == userid)
