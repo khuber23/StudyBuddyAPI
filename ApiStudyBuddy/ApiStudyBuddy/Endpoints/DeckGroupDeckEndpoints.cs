@@ -35,6 +35,22 @@ public static class DeckGroupDeckEndpoints
       .WithName("GetmauiDeckGroupDeckByDeckGroupId")
       .WithOpenApi();
 
+        //returns my specific deckGroupDeck by deckgroupDeck Id
+        group.MapGet("/maui/specificdeckgroupdeck/{deckgroupid}/{deckid}", async Task<Results<Ok<DeckGroupDeck>, NotFound>>(int deckId, int deckGroupId, ApiStudyBuddyContext db) =>
+        {
+            return await db.DeckGroupDecks.AsNoTracking()
+            .Include(model => model.DeckGroup)
+            .Include(model => model.Deck)
+            .ThenInclude(model => model.DeckFlashCards)
+            .ThenInclude(model => model.FlashCard)
+            .FirstOrDefaultAsync(model => model.DeckId == deckId && model.DeckGroupId == deckGroupId)
+            is DeckGroupDeck model 
+            ? TypedResults.Ok(model)
+            : TypedResults.NotFound();
+        })
+      .WithName("GetmauiDeckGroupDeckByd")
+      .WithOpenApi();
+
         group.MapGet("/{id}", async Task<Results<Ok<DeckGroupDeck>, NotFound>> (int deckgroupdeckid, ApiStudyBuddyContext db) =>
         {
             return await db.DeckGroupDecks.AsNoTracking()
