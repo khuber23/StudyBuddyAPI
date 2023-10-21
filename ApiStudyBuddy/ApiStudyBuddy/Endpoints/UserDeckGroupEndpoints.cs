@@ -22,12 +22,10 @@ public static class UserDeckGroupEndpoints
         .WithName("GetAllUserDeckGroups")
         .WithOpenApi();
 
-
-
-        group.MapGet("/{id}", async Task<Results<Ok<UserDeckGroup>, NotFound>> (int userdeckgroupid, ApiStudyBuddyContext db) =>
+        group.MapGet("/{id}", async Task<Results<Ok<UserDeckGroup>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.UserDeckGroups.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.UserDeckGroupId == userdeckgroupid)
+                .FirstOrDefaultAsync(model => model.UserId == userid)
                 is UserDeckGroup model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -35,40 +33,11 @@ public static class UserDeckGroupEndpoints
         .WithName("GetUserDeckGroupById")
         .WithOpenApi();
 
-        //full userDeckGroup for maui, gets literally all/most of the info needed.
-        group.MapGet("maui/user/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
-        {
-            return await db.UserDeckGroups.AsNoTracking()
-            .Include(model => model.User)
-            .Include(model => model.DeckGroup)
-            .ThenInclude(model => model.DeckGroupDecks)
-            .ThenInclude(model => model.Deck)
-            .ThenInclude(model => model.DeckFlashCards)
-            .ThenInclude(model => model.FlashCard)
-            .Where(model => model.UserId == userid)
-            .ToListAsync();
-        })
-        .WithName("GetMauiFullUserDeckGroupByUserId")
-        .WithOpenApi();
-
-        //basically just gets deckgroup and not all the stuff with it...mostly used for the MAUI DeckGroup page.
-        group.MapGet("maui/deckgroup/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
-        {
-            return await db.UserDeckGroups.AsNoTracking()
-            .Include(model => model.User)
-            .Include(model => model.DeckGroup)
-            .Where(model => model.UserId == userid)
-            .ToListAsync();
-        })
-       .WithName("GetMauiOnlyUserDeckGroupByUserId")
-       .WithOpenApi();
-
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userdeckgroupid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
         {
             var affected = await db.UserDeckGroups
-                .Where(model => model.UserDeckGroupId == userdeckgroupid)
+                .Where(model => model.UserId == userid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.UserDeckGroupId, userDeckGroup.UserDeckGroupId)
                     .SetProperty(m => m.UserId, userDeckGroup.UserId)
                     .SetProperty(m => m.DeckGroupId, userDeckGroup.DeckGroupId)
                     );
@@ -77,23 +46,19 @@ public static class UserDeckGroupEndpoints
         .WithName("UpdateUserDeckGroup")
         .WithOpenApi();
 
-
-
         group.MapPost("/", async (UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
         {
             db.UserDeckGroups.Add(userDeckGroup);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/UserDeckGroup/{userDeckGroup.UserDeckGroupId}", userDeckGroup);
+            return TypedResults.Created($"/api/UserDeckGroup/{userDeckGroup.UserId}", userDeckGroup);
         })
         .WithName("CreateUserDeckGroup")
         .WithOpenApi();
 
-
-
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int userdeckgroupid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.UserDeckGroups
-                .Where(model => model.UserDeckGroupId == userdeckgroupid)
+                .Where(model => model.UserId == userid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

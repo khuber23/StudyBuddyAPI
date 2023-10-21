@@ -13,7 +13,7 @@
 
 		public bool IsPublic { get; set; }
 
-		public List<StudySessionFlashCard>? SessionFlashCards { get; set; }
+		public List<StudySessionFlashCard>? StudySessionFlashCards { get; set; }
 
         public List<DeckFlashCard>? DeckFlashCards { get; set; }
 	}

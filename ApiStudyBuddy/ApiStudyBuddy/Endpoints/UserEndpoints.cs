@@ -15,24 +15,25 @@ public static class UserEndpoints
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
             return await db.Users
+            .Include(x => x.UserDecks)
             .ToListAsync();
         })
         .WithName("GetAllUsers")
         .WithOpenApi();
 
+        group.MapGet("/MVC/User", async Task<Results<Ok<User>, NotFound>> (string username, ApiStudyBuddyContext db) =>
+        {
+            return await db.Users.AsNoTracking()
+                .FirstOrDefaultAsync(model => model.Username == username)
+                is User model
+                    ? TypedResults.Ok(model)
+                    : TypedResults.NotFound();
+        })
+        .WithName("GetUserByUsername")
+        .WithOpenApi();
 
-		group.MapGet("/MVC/User", async Task<Results<Ok<User>, NotFound>> (string username ,ApiStudyBuddyContext db) =>
-		{
-			return await db.Users.AsNoTracking()
-				.FirstOrDefaultAsync(model => model.Username == username)
-				is User model
-					? TypedResults.Ok(model)
-					: TypedResults.NotFound();
-		})
-		.WithName("GetUserByUsername")
-		.WithOpenApi();
 
-		group.MapGet("/{id}", async Task<Results<Ok<User>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
+        group.MapGet("/{id}", async Task<Results<Ok<User>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.Users.AsNoTracking()
                 .FirstOrDefaultAsync(model => model.UserId == userid)
@@ -42,8 +43,6 @@ public static class UserEndpoints
         })
         .WithName("GetUserById")
         .WithOpenApi();
-
-
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userid, User user, ApiStudyBuddyContext db) =>
         {
@@ -57,13 +56,12 @@ public static class UserEndpoints
                     .SetProperty(m => m.Username, user.Username)
                     .SetProperty(m => m.PasswordHash, user.PasswordHash)
                     .SetProperty(m => m.ProfilePicture, user.ProfilePicture)
+                    .SetProperty(m => m.IsAdmin, user.IsAdmin)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
         .WithName("UpdateUser")
         .WithOpenApi();
-
-
 
         group.MapPost("/", async (User user, ApiStudyBuddyContext db) =>
         {
@@ -73,8 +71,6 @@ public static class UserEndpoints
         })
         .WithName("CreateUser")
         .WithOpenApi();
-
-
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {

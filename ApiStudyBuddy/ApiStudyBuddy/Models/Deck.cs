@@ -12,6 +12,7 @@ namespace ApiStudyBuddy.Models
 		[Display("Deck Description")]
 		public string? DeckDescription { get; set; }
 
+
 		public List<UserDeck>? UserDecks { get; set; }
 
 		public List<StudySession>? StudySessions { get; set; }

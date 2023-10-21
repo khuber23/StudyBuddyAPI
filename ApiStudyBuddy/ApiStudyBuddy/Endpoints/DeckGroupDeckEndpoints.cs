@@ -15,8 +15,8 @@ public static class DeckGroupDeckEndpoints
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
             return await db.DeckGroupDecks
-            .Include(x => x.DeckGroup)
             .Include(x => x.Deck)
+            .Include(x => x.DeckGroup)
             .ToListAsync();
         })
         .WithName("GetAllDeckGroupDecks")
@@ -25,18 +25,18 @@ public static class DeckGroupDeckEndpoints
         group.MapGet("/maui/{deckgroupid}", async (int deckgroupid, ApiStudyBuddyContext db) =>
         {
             return await db.DeckGroupDecks.AsNoTracking()
-            .Include(model => model.DeckGroup)
-            .Include(model => model.Deck)
-            .Where(model => model.DeckGroupId == deckgroupid)
+            .Include(x => x.Deck)
+            .Include(x => x.DeckGroup)
+            .Where(x => x.DeckGroupId == deckgroupid)
             .ToListAsync();
         })
-      .WithName("GetmauiDeckGroupDeckByDeckGroupId")
-      .WithOpenApi();
+        .WithName("GetmauiDeckGroupDeckByDeckGroupId")
+        .WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<DeckGroupDeck>, NotFound>> (int deckgroupdeckid, ApiStudyBuddyContext db) =>
+        group.MapGet("/{id}", async Task<Results<Ok<DeckGroupDeck>, NotFound>> (int deckgroupid, ApiStudyBuddyContext db) =>
         {
             return await db.DeckGroupDecks.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.DeckGroupDeckId == deckgroupdeckid)
+                .FirstOrDefaultAsync(model => model.DeckGroupId == deckgroupid)
                 is DeckGroupDeck model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -44,12 +44,11 @@ public static class DeckGroupDeckEndpoints
         .WithName("GetDeckGroupDeckById")
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupdeckid, DeckGroupDeck deckGroupDeck, ApiStudyBuddyContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, DeckGroupDeck deckGroupDeck, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroupDecks
-                .Where(model => model.DeckGroupDeckId == deckgroupdeckid)
+                .Where(model => model.DeckGroupId == deckgroupid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.DeckGroupDeckId, deckGroupDeck.DeckGroupDeckId)
                     .SetProperty(m => m.DeckGroupId, deckGroupDeck.DeckGroupId)
                     .SetProperty(m => m.DeckId, deckGroupDeck.DeckId)
                     );
@@ -62,15 +61,15 @@ public static class DeckGroupDeckEndpoints
         {
             db.DeckGroupDecks.Add(deckGroupDeck);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DeckGroupDeck/{deckGroupDeck.DeckGroupDeckId}", deckGroupDeck);
+            return TypedResults.Created($"/api/DeckGroupDeck/{deckGroupDeck.DeckGroupId}", deckGroupDeck);
         })
         .WithName("CreateDeckGroupDeck")
         .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupdeckid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroupDecks
-                .Where(model => model.DeckGroupDeckId == deckgroupdeckid)
+                .Where(model => model.DeckGroupId == deckgroupid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

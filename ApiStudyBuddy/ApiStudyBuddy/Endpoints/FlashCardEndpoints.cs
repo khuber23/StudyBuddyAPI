@@ -15,7 +15,7 @@ public static class FlashCardEndpoints
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
             return await db.FlashCards
-            .Include(x => x.SessionFlashCards)
+            .Include(x => x.StudySessionFlashCards)
             .Include(x => x.DeckFlashCards)
             .ToListAsync();
         })
@@ -43,6 +43,7 @@ public static class FlashCardEndpoints
                     .SetProperty(m => m.FlashCardQuestionImage, flashCard.FlashCardQuestionImage)
                     .SetProperty(m => m.FlashCardAnswer, flashCard.FlashCardAnswer)
                     .SetProperty(m => m.FlashCardAnswerImage, flashCard.FlashCardAnswerImage)
+                    .SetProperty(m => m.IsPublic, flashCard.IsPublic)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
