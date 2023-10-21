@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20231018002140_intialMigration")]
-    partial class intialMigration
+    [Migration("20231021052016_initial_migration_addCompositeKeys")]
+    partial class initial_migration_addCompositeKeys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,21 +66,13 @@ namespace ApiStudyBuddy.Migrations
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckFlashCard", b =>
                 {
-                    b.Property<int>("DeckFlashCardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeckFlashCardId"));
-
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
 
                     b.Property<int>("FlashCardId")
                         .HasColumnType("int");
 
-                    b.HasKey("DeckFlashCardId");
-
-                    b.HasIndex("DeckId");
+                    b.HasKey("DeckId", "FlashCardId");
 
                     b.HasIndex("FlashCardId");
 
@@ -89,31 +81,26 @@ namespace ApiStudyBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            DeckFlashCardId = 1,
                             DeckId = 1,
                             FlashCardId = 1
                         },
                         new
                         {
-                            DeckFlashCardId = 2,
                             DeckId = 1,
                             FlashCardId = 2
                         },
                         new
                         {
-                            DeckFlashCardId = 3,
                             DeckId = 2,
                             FlashCardId = 3
                         },
                         new
                         {
-                            DeckFlashCardId = 4,
                             DeckId = 2,
                             FlashCardId = 4
                         },
                         new
                         {
-                            DeckFlashCardId = 5,
                             DeckId = 3,
                             FlashCardId = 5
                         });
@@ -148,21 +135,13 @@ namespace ApiStudyBuddy.Migrations
 
             modelBuilder.Entity("ApiStudyBuddy.Models.DeckGroupDeck", b =>
                 {
-                    b.Property<int>("DeckGroupDeckId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeckGroupDeckId"));
-
                     b.Property<int>("DeckGroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
 
-                    b.HasKey("DeckGroupDeckId");
-
-                    b.HasIndex("DeckGroupId");
+                    b.HasKey("DeckGroupId", "DeckId");
 
                     b.HasIndex("DeckId");
 
@@ -171,19 +150,16 @@ namespace ApiStudyBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            DeckGroupDeckId = 1,
                             DeckGroupId = 1,
                             DeckId = 1
                         },
                         new
                         {
-                            DeckGroupDeckId = 2,
                             DeckGroupId = 1,
                             DeckId = 2
                         },
                         new
                         {
-                            DeckGroupDeckId = 3,
                             DeckGroupId = 1,
                             DeckId = 3
                         });
@@ -305,11 +281,8 @@ namespace ApiStudyBuddy.Migrations
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
                 {
-                    b.Property<int>("StudySessionFlashCardId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("StudySessionId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudySessionFlashCardId"));
 
                     b.Property<int>("FlashCardId")
                         .HasColumnType("int");
@@ -317,31 +290,24 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int>("StudySessionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudySessionFlashCardId");
+                    b.HasKey("StudySessionId", "FlashCardId");
 
                     b.HasIndex("FlashCardId");
-
-                    b.HasIndex("StudySessionId");
 
                     b.ToTable("StudySessionsFlashCards");
 
                     b.HasData(
                         new
                         {
-                            StudySessionFlashCardId = 1,
+                            StudySessionId = 1,
                             FlashCardId = 1,
-                            IsCorrect = true,
-                            StudySessionId = 1
+                            IsCorrect = true
                         },
                         new
                         {
-                            StudySessionFlashCardId = 2,
+                            StudySessionId = 1,
                             FlashCardId = 2,
-                            IsCorrect = false,
-                            StudySessionId = 1
+                            IsCorrect = false
                         });
                 });
 
@@ -405,75 +371,55 @@ namespace ApiStudyBuddy.Migrations
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeck", b =>
                 {
-                    b.Property<int>("UserDeckId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserDeckId"));
 
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserDeckId");
+                    b.HasKey("UserId", "DeckId");
 
                     b.HasIndex("DeckId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserDecks");
 
                     b.HasData(
                         new
                         {
-                            UserDeckId = 1,
-                            DeckId = 1,
-                            UserId = 1
+                            UserId = 1,
+                            DeckId = 1
                         },
                         new
                         {
-                            UserDeckId = 2,
-                            DeckId = 2,
-                            UserId = 1
+                            UserId = 1,
+                            DeckId = 2
                         },
                         new
                         {
-                            UserDeckId = 3,
-                            DeckId = 3,
-                            UserId = 1
+                            UserId = 1,
+                            DeckId = 3
                         });
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.UserDeckGroup", b =>
                 {
-                    b.Property<int>("UserDeckGroupId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserDeckGroupId"));
 
                     b.Property<int>("DeckGroupId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserDeckGroupId");
+                    b.HasKey("UserId", "DeckGroupId");
 
                     b.HasIndex("DeckGroupId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserDeckGroups");
 
                     b.HasData(
                         new
                         {
-                            UserDeckGroupId = 1,
-                            DeckGroupId = 1,
-                            UserId = 1
+                            UserId = 1,
+                            DeckGroupId = 1
                         });
                 });
 
@@ -541,7 +487,7 @@ namespace ApiStudyBuddy.Migrations
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySessionFlashCard", b =>
                 {
                     b.HasOne("ApiStudyBuddy.Models.FlashCard", "FlashCard")
-                        .WithMany("SessionFlashCards")
+                        .WithMany("StudySessionFlashCards")
                         .HasForeignKey("FlashCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -619,7 +565,7 @@ namespace ApiStudyBuddy.Migrations
                 {
                     b.Navigation("DeckFlashCards");
 
-                    b.Navigation("SessionFlashCards");
+                    b.Navigation("StudySessionFlashCards");
                 });
 
             modelBuilder.Entity("ApiStudyBuddy.Models.StudySession", b =>

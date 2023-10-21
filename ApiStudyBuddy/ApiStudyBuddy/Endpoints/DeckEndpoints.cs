@@ -15,17 +15,14 @@ public static class DeckEndpoints
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
             return await db.Decks
-            .Include(x => x.DeckGroupDecks)
-            .Include(x => x.DeckFlashCards)
-            .Include(x => x.StudySessions)
             .Include(x => x.UserDecks)
+            .Include(x => x.DeckFlashCards)
+            .Include(x => x.DeckGroupDecks)
+            .Include(x => x.StudySessions)
             .ToListAsync();
         })
         .WithName("GetAllDecks")
         .WithOpenApi();
-
-
-
 
         group.MapGet("/{id}", async Task<Results<Ok<Deck>, NotFound>> (int deckid, ApiStudyBuddyContext db) =>
         {
@@ -37,9 +34,6 @@ public static class DeckEndpoints
         })
         .WithName("GetDeckById")
         .WithOpenApi();
-
-
-
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckid, Deck deck, ApiStudyBuddyContext db) =>
         {
@@ -55,9 +49,6 @@ public static class DeckEndpoints
         .WithName("UpdateDeck")
         .WithOpenApi();
 
-
-
-
         group.MapPost("/", async (Deck deck, ApiStudyBuddyContext db) =>
         {
             db.Decks.Add(deck);
@@ -66,10 +57,6 @@ public static class DeckEndpoints
         })
         .WithName("CreateDeck")
         .WithOpenApi();
-
-
-
-
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckid, ApiStudyBuddyContext db) =>
         {

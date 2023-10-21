@@ -22,12 +22,10 @@ public static class StudySessionFlashCardEndpoints
         .WithName("GetAllStudySessionFlashCards")
         .WithOpenApi();
 
-
-
-        group.MapGet("/{id}", async Task<Results<Ok<StudySessionFlashCard>, NotFound>> (int studysessionflashcardid, ApiStudyBuddyContext db) =>
+        group.MapGet("/{id}", async Task<Results<Ok<StudySessionFlashCard>, NotFound>> (int studysessionid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessionsFlashCards.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.StudySessionFlashCardId == studysessionflashcardid)
+                .FirstOrDefaultAsync(model => model.StudySessionId == studysessionid)
                 is StudySessionFlashCard model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -35,61 +33,62 @@ public static class StudySessionFlashCardEndpoints
         .WithName("GetStudySessionFlashCardById")
         .WithOpenApi();
 
+
         group.MapGet("maui/full/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessionsFlashCards.AsNoTracking()
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.User)
-             .Include(model => model.StudySession)
-            .ThenInclude(model => model.DeckGroup)
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.Deck)
-            .Include(model => model.FlashCard)
-            .Where(model => model.StudySession.UserId == userid)
-            .ToListAsync();
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.User)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.DeckGroup)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.Deck)
+                .Include(x => x.FlashCard)
+                .Where(x => x.StudySession.UserId == userid).ToListAsync();
         })
-      .WithName("GetMauiFullStudySessionFlashCardsByUserId")
-      .WithOpenApi();
+        .WithName("GetMauiFullStudySessionFlashCardsByUserId")
+        .WithOpenApi();
 
-        group.MapGet("/maui/correct/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+
+        group.MapGet("maui/incorrect/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessionsFlashCards.AsNoTracking()
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.User)
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.DeckGroup)
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.Deck)
-            .Include(model => model.FlashCard)
-            .Where(model => model.StudySession.UserId == userid && model.IsCorrect == true)
-            .ToListAsync();
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.User)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.DeckGroup)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.Deck)
+                .Include(x => x.FlashCard)
+                .Where(x => x.StudySession.UserId == userid && x.IsCorrect == false)
+                .ToListAsync();
         })
-      .WithName("GetMauiCorrectStudySessionFlashCardsByUserId")
-      .WithOpenApi();
+        .WithName("GetMauiIncorrectStudySessionFlashCardsByUserId")
+        .WithOpenApi();
 
-        group.MapGet("/maui/incorrect/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
+        group.MapGet("maui/correct/{UserId}", async (int userid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessionsFlashCards.AsNoTracking()
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.User)
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.DeckGroup)
-            .Include(model => model.StudySession)
-            .ThenInclude(model => model.Deck)
-            .Include(model => model.FlashCard)
-            .Where(model => model.StudySession.UserId == userid && model.IsCorrect == false)
-            .ToListAsync();
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.User)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.DeckGroup)
+                .Include(x => x.StudySession)
+                .ThenInclude(x => x.Deck)
+                .Include(x => x.FlashCard)
+                .Where(x => x.StudySession.UserId == userid && x.IsCorrect == true)
+                .ToListAsync();
         })
-     .WithName("GetMauiIncorrectStudySessionFlashCardsByUserId")
-     .WithOpenApi();
+        .WithName("GetMauiCorrectStudySessionFlashCardsByUserId")
+        .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionflashcardid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessionsFlashCards
-                .Where(model => model.StudySessionFlashCardId == studysessionflashcardid)
+                .Where(model => model.StudySessionId == studysessionid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.StudySessionFlashCardId, studySessionFlashCard.StudySessionFlashCardId)
                     .SetProperty(m => m.StudySessionId, studySessionFlashCard.StudySessionId)
+                    .SetProperty(m => m.FlashCardId, studySessionFlashCard.FlashCardId)
                     .SetProperty(m => m.IsCorrect, studySessionFlashCard.IsCorrect)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -97,23 +96,19 @@ public static class StudySessionFlashCardEndpoints
         .WithName("UpdateStudySessionFlashCard")
         .WithOpenApi();
 
-
-
         group.MapPost("/", async (StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
         {
             db.StudySessionsFlashCards.Add(studySessionFlashCard);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/StudySessionFlashCard/{studySessionFlashCard.StudySessionFlashCardId}", studySessionFlashCard);
+            return TypedResults.Created($"/api/StudySessionFlashCard/{studySessionFlashCard.StudySessionId}", studySessionFlashCard);
         })
         .WithName("CreateStudySessionFlashCard")
         .WithOpenApi();
 
-
-
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int studysessionflashcardid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessionsFlashCards
-                .Where(model => model.StudySessionFlashCardId == studysessionflashcardid)
+                .Where(model => model.StudySessionId == studysessionid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
