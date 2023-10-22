@@ -23,7 +23,8 @@ public static class UserEndpoints
 
         group.MapGet("/MVC/User", async Task<Results<Ok<User>, NotFound>> (string username, ApiStudyBuddyContext db) =>
         {
-            return await db.Users.AsNoTracking()
+            return await db.Users
+            .AsNoTracking()
                 .FirstOrDefaultAsync(model => model.Username == username)
                 is User model
                     ? TypedResults.Ok(model)
@@ -35,7 +36,14 @@ public static class UserEndpoints
 
         group.MapGet("/{id}", async Task<Results<Ok<User>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
-            return await db.Users.AsNoTracking()
+            return await db.Users
+            .Include(x => x.UserDeckGroups)
+            .ThenInclude(z => z.DeckGroup)
+            .Include(x => x.UserDecks)
+            .ThenInclude(y => y.Deck)
+            .ThenInclude(f => f.DeckFlashCards)
+            .ThenInclude(d => d.FlashCard)
+            .AsNoTracking()
                 .FirstOrDefaultAsync(model => model.UserId == userid)
                 is User model
                     ? TypedResults.Ok(model)

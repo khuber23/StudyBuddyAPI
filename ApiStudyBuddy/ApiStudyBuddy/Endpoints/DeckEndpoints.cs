@@ -17,6 +17,7 @@ public static class DeckEndpoints
             return await db.Decks
             .Include(x => x.UserDecks)
             .Include(x => x.DeckFlashCards)
+            .ThenInclude(f => f.FlashCard)
             .Include(x => x.DeckGroupDecks)
             .Include(x => x.StudySessions)
             .ToListAsync();
@@ -26,7 +27,10 @@ public static class DeckEndpoints
 
         group.MapGet("/{id}", async Task<Results<Ok<Deck>, NotFound>> (int deckid, ApiStudyBuddyContext db) =>
         {
-            return await db.Decks.AsNoTracking()
+            return await db.Decks
+            .Include(x => x.DeckFlashCards)
+            .ThenInclude(d => d.FlashCard)
+            .AsNoTracking()
                 .FirstOrDefaultAsync(model => model.DeckId == deckid)
                 is Deck model
                     ? TypedResults.Ok(model)

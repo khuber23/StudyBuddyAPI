@@ -24,7 +24,9 @@ public static class UserDeckEndpoints
 
         group.MapGet("/{id}", async Task<Results<Ok<UserDeck>, NotFound>> (int userid, ApiStudyBuddyContext db) =>
         {
-            return await db.UserDecks.AsNoTracking()
+            return await db.UserDecks
+                .Include(x => x.Deck)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(model => model.UserId == userid)
                 is UserDeck model
                     ? TypedResults.Ok(model)
