@@ -33,6 +33,32 @@ public static class UserDeckGroupEndpoints
         .WithName("GetUserDeckGroupById")
         .WithOpenApi();
 
+        group.MapGet("/maui/user/{userId}", async ( int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups
+            .Include(x => x.User)
+            .Include(x => x.DeckGroup)
+            .ThenInclude(x => x.DeckGroupDecks)
+            .ThenInclude(x => x.Deck)
+            .ThenInclude(x => x.DeckFlashCards)
+            .ThenInclude(x => x.FlashCard)
+            .Where(x => x.UserId == userid)
+            .ToListAsync();
+        })
+        .WithName("GetAllUserDeckGroupsbyUserId")
+        .WithOpenApi();
+
+        group.MapGet("/maui/deckgroup/{userId}", async (int userid, ApiStudyBuddyContext db) =>
+        {
+            return await db.UserDeckGroups
+            .Include(x => x.User)
+            .Include(x => x.DeckGroup)
+            .Where(x => x.UserId == userid)
+            .ToListAsync();
+        })
+       .WithName("GetAllUserDeckGroupsjustdeckgroup")
+       .WithOpenApi();
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userid, UserDeckGroup userDeckGroup, ApiStudyBuddyContext db) =>
         {
             var affected = await db.UserDeckGroups
