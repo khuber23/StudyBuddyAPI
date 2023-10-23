@@ -39,6 +39,21 @@ public static class DeckEndpoints
         .WithName("GetDeckById")
         .WithOpenApi();
 
+        //needed to add a way to retrieve a deck by the deck name. Also needed to do /deckname/{deckname} since it was too similiar to just do /{deckname}
+        group.MapGet("/deckname/{deckname}", async Task<Results<Ok<Deck>, NotFound>> (string deckName, ApiStudyBuddyContext db) =>
+        {
+            return await db.Decks
+            .Include(x => x.DeckFlashCards)
+            .ThenInclude(d => d.FlashCard)
+            .AsNoTracking()
+                .FirstOrDefaultAsync(model => model.DeckName == deckName)
+                is Deck model
+                    ? TypedResults.Ok(model)
+                    : TypedResults.NotFound();
+        })
+       .WithName("GetDeckByDeckName")
+       .WithOpenApi();
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckid, Deck deck, ApiStudyBuddyContext db) =>
         {
             var affected = await db.Decks
