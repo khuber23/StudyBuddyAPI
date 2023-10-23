@@ -39,7 +39,6 @@ public static class DeckGroupEndpoints
             var affected = await db.DeckGroups
                 .Where(model => model.DeckGroupId == deckgroupid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.DeckGroupId, deckGroup.DeckGroupId)
                     .SetProperty(m => m.DeckGroupName, deckGroup.DeckGroupName)
                     .SetProperty(m => m.DeckGroupDescription, deckGroup.DeckGroupDescription)
                     );

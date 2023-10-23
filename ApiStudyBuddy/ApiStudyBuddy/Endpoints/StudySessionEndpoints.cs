@@ -54,7 +54,6 @@ public static class StudySessionEndpoints
             var affected = await db.StudySessions
                 .Where(model => model.StudySessionId == studysessionid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.StudySessionId, studySession.StudySessionId)
                     .SetProperty(m => m.StartTime, studySession.StartTime)
                     .SetProperty(m => m.EndTime, studySession.EndTime)
                     .SetProperty(m => m.IsCompleted, studySession.IsCompleted)
