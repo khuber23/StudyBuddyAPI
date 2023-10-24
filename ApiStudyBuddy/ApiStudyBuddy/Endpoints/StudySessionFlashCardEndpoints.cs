@@ -82,13 +82,11 @@ public static class StudySessionFlashCardEndpoints
         .WithName("GetMauiCorrectStudySessionFlashCardsByUserId")
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, int flashcardid, StudySessionFlashCard studySessionFlashCard, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessionsFlashCards
-                .Where(model => model.StudySessionId == studysessionid)
+                .Where(model => model.StudySessionId == studysessionid && model.FlashCardId == flashcardid)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.StudySessionId, studySessionFlashCard.StudySessionId)
-                    .SetProperty(m => m.FlashCardId, studySessionFlashCard.FlashCardId)
                     .SetProperty(m => m.IsCorrect, studySessionFlashCard.IsCorrect)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
