@@ -52,10 +52,10 @@ public static class UserEndpoints
         .WithName("GetUserById")
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int userid, User user, ApiStudyBuddyContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, User user, ApiStudyBuddyContext db) =>
         {
             var affected = await db.Users
-                .Where(model => model.UserId == userid)
+                .Where(model => model.UserId == id)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(m => m.FirstName, user.FirstName)
                     .SetProperty(m => m.LastName, user.LastName)
