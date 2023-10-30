@@ -2,19 +2,25 @@
 using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
-namespace ApiStudyBuddy;
+using Microsoft.AspNetCore.OpenApi;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class FlashCardEndpoints
 {
-    public static void MapFlashCardEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapFlashCardEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/FlashCard");
+        var group = routes.MapGroup("/api/FlashCard").WithTags(nameof(FlashCard));
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.FlashCards.ToListAsync();
+            return await db.FlashCards
+            .Include(x => x.StudySessionFlashCards)
+            .Include(x => x.DeckFlashCards)
+            .ToListAsync();
         })
-        .WithName("GetAllFlashCards");
+        .WithName("GetAllFlashCards")
+        .WithOpenApi();
 
         group.MapGet("/{id}", async Task<Results<Ok<FlashCard>, NotFound>> (int flashcardid, ApiStudyBuddyContext db) =>
         {
@@ -24,28 +30,33 @@ public static class FlashCardEndpoints
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
         })
-        .WithName("GetFlashCardById");
+        .WithName("GetFlashCardById")
+        .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int flashcardid, FlashCard flashCard, ApiStudyBuddyContext db) =>
         {
             var affected = await db.FlashCards
                 .Where(model => model.FlashCardId == flashcardid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.FlashCardId, flashCard.FlashCardId)
                     .SetProperty(m => m.FlashCardQuestion, flashCard.FlashCardQuestion)
+                    .SetProperty(m => m.FlashCardQuestionImage, flashCard.FlashCardQuestionImage)
                     .SetProperty(m => m.FlashCardAnswer, flashCard.FlashCardAnswer)
+                    .SetProperty(m => m.FlashCardAnswerImage, flashCard.FlashCardAnswerImage)
+                    .SetProperty(m => m.IsPublic, flashCard.IsPublic)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("UpdateFlashCard");
+        .WithName("UpdateFlashCard")
+        .WithOpenApi();
 
         group.MapPost("/", async (FlashCard flashCard, ApiStudyBuddyContext db) =>
         {
             db.FlashCards.Add(flashCard);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/FlashCard/{flashCard.FlashCardId}",flashCard);
+            return TypedResults.Created($"/api/FlashCard/{flashCard.FlashCardId}", flashCard);
         })
-        .WithName("CreateFlashCard");
+        .WithName("CreateFlashCard")
+        .WithOpenApi();
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int flashcardid, ApiStudyBuddyContext db) =>
         {
@@ -54,6 +65,7 @@ public static class FlashCardEndpoints
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("DeleteFlashCard");
+        .WithName("DeleteFlashCard")
+        .WithOpenApi();
     }
 }

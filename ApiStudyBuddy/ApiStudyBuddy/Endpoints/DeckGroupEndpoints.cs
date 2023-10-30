@@ -3,17 +3,22 @@ using ApiStudyBuddy.Data;
 using ApiStudyBuddy.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
-namespace ApiStudyBuddy;
+
+namespace ApiStudyBuddy.Endpoints;
 
 public static class DeckGroupEndpoints
 {
-    public static void MapDeckGroupEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapDeckGroupEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/DeckGroup").WithTags(nameof(DeckGroup));
 
         group.MapGet("/", async (ApiStudyBuddyContext db) =>
         {
-            return await db.DeckGroups.ToListAsync();
+            return await db.DeckGroups
+            .Include(x => x.UserDeckGroups)
+            .Include(x => x.DeckGroupDecks)
+            .Include(x => x.StudySessions)
+            .ToListAsync();
         })
         .WithName("GetAllDeckGroups")
         .WithOpenApi();
@@ -34,7 +39,6 @@ public static class DeckGroupEndpoints
             var affected = await db.DeckGroups
                 .Where(model => model.DeckGroupId == deckgroupid)
                 .ExecuteUpdateAsync(setters => setters
-                    //.SetProperty(m => m.DeckGroupId, deckGroup.DeckGroupId)
                     .SetProperty(m => m.DeckGroupName, deckGroup.DeckGroupName)
                     .SetProperty(m => m.DeckGroupDescription, deckGroup.DeckGroupDescription)
                     );
@@ -47,7 +51,7 @@ public static class DeckGroupEndpoints
         {
             db.DeckGroups.Add(deckGroup);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/DeckGroup/{deckGroup.DeckGroupId}",deckGroup);
+            return TypedResults.Created($"/api/DeckGroup/{deckGroup.DeckGroupId}", deckGroup);
         })
         .WithName("CreateDeckGroup")
         .WithOpenApi();

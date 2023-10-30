@@ -8,7 +8,7 @@ namespace ApiStudyBuddy.Models
 
 		public string? FirstName { get; set; }
 
-		public string? LastName { get; set; }
+        public string? LastName { get; set; }
 
 		public string? Email { get; set; }
 
@@ -17,9 +17,11 @@ namespace ApiStudyBuddy.Models
 
 		[Required]
 		[DataType(DataType.Password)]
-		public string? Password { get; set; }
+		public string? PasswordHash { get; set; }
 
-		//public void ProfilePicture { get; set; }
+		public string? ProfilePicture { get; set; }
+
+		public bool IsAdmin { get; set; }
 
 		public List<UserDeck>? UserDecks { get; set; }
 

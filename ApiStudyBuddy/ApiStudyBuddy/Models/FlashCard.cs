@@ -5,15 +5,16 @@
 		public int FlashCardId { get; set; }
 
 		public string? FlashCardQuestion { get; set; }
+		public string? FlashCardQuestionImage { get; set; }
+
 
 		public string? FlashCardAnswer { get; set; }
+		public string? FlashCardAnswerImage { get; set; }
 
-		//public int FlashCardQuestionImage { get; set; }
+		public bool IsPublic { get; set; }
 
-		//public string FlashCardAnswerImage { get; set; }
+		public List<StudySessionFlashCard>? StudySessionFlashCards { get; set; }
 
-		public DeckFlashCard? DeckFlashCard { get; set; }
-
-		public StudySessionFlashCard? StudySessionFlashCard { get; set; }
+        public List<DeckFlashCard>? DeckFlashCards { get; set; }
 	}
 }
