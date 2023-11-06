@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiStudyBuddy.Migrations
 {
     [DbContext(typeof(ApiStudyBuddyContext))]
-    [Migration("20231021052016_initial_migration_addCompositeKeys")]
-    partial class initial_migration_addCompositeKeys
+    [Migration("20231106153813_InitialCompositeWithUpdates")]
+    partial class InitialCompositeWithUpdates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,12 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("DeckName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
                     b.HasKey("DeckId");
 
                     b.ToTable("Decks");
@@ -48,19 +54,25 @@ namespace ApiStudyBuddy.Migrations
                         {
                             DeckId = 1,
                             DeckDescription = "Design patterns all about class instantiation",
-                            DeckName = "Creational Design Patterns"
+                            DeckName = "Creational Design Patterns",
+                            IsPublic = false,
+                            ReadOnly = false
                         },
                         new
                         {
                             DeckId = 2,
                             DeckDescription = "Design patterns all about class and Object composition",
-                            DeckName = "Structural Design Patterns"
+                            DeckName = "Structural Design Patterns",
+                            IsPublic = false,
+                            ReadOnly = false
                         },
                         new
                         {
                             DeckId = 3,
                             DeckDescription = "Design patterns all about Class's objects communication",
-                            DeckName = "Behavorial Design Patterns"
+                            DeckName = "Behavorial Design Patterns",
+                            IsPublic = false,
+                            ReadOnly = false
                         });
                 });
 
@@ -120,6 +132,12 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<string>("DeckGroupName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
                     b.HasKey("DeckGroupId");
 
                     b.ToTable("DeckGroups");
@@ -129,7 +147,9 @@ namespace ApiStudyBuddy.Migrations
                         {
                             DeckGroupId = 1,
                             DeckGroupDescription = "Solutions to commonly occurring problems in software design.",
-                            DeckGroupName = "Design Patterns"
+                            DeckGroupName = "Design Patterns",
+                            IsPublic = false,
+                            ReadOnly = false
                         });
                 });
 
@@ -188,6 +208,9 @@ namespace ApiStudyBuddy.Migrations
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("bit");
+
                     b.HasKey("FlashCardId");
 
                     b.ToTable("FlashCards");
@@ -198,35 +221,40 @@ namespace ApiStudyBuddy.Migrations
                             FlashCardId = 1,
                             FlashCardAnswer = "Creates an instance of several families of classes",
                             FlashCardQuestion = "What is abstract factory",
-                            IsPublic = true
+                            IsPublic = true,
+                            ReadOnly = true
                         },
                         new
                         {
                             FlashCardId = 2,
                             FlashCardAnswer = "A class of which only a single instance can exist",
                             FlashCardQuestion = "What is Singleton?",
-                            IsPublic = true
+                            IsPublic = true,
+                            ReadOnly = true
                         },
                         new
                         {
                             FlashCardId = 3,
                             FlashCardAnswer = "Add responsibilites to objects dynamically",
                             FlashCardQuestion = "What is decorator?",
-                            IsPublic = true
+                            IsPublic = true,
+                            ReadOnly = true
                         },
                         new
                         {
                             FlashCardId = 4,
                             FlashCardAnswer = "A single class that represents an entire subsystem",
                             FlashCardQuestion = "What is facade?",
-                            IsPublic = true
+                            IsPublic = true,
+                            ReadOnly = true
                         },
                         new
                         {
                             FlashCardId = 5,
                             FlashCardAnswer = "Sequentially access the elements of a collection",
                             FlashCardQuestion = "What is iterator?",
-                            IsPublic = true
+                            IsPublic = true,
+                            ReadOnly = true
                         });
                 });
 

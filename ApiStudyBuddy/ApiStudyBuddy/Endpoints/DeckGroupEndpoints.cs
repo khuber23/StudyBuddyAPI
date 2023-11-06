@@ -41,6 +41,8 @@ public static class DeckGroupEndpoints
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(m => m.DeckGroupName, deckGroup.DeckGroupName)
                     .SetProperty(m => m.DeckGroupDescription, deckGroup.DeckGroupDescription)
+                      .SetProperty(m => m.IsPublic, deckGroup.IsPublic)
+                    .SetProperty(m => m.ReadOnly, deckGroup.ReadOnly)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
