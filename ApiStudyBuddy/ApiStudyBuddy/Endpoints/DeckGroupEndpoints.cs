@@ -34,6 +34,23 @@ public static class DeckGroupEndpoints
         .WithName("GetDeckGroupById")
         .WithOpenApi();
 
+        //needed to add a way to retrieve a deckgroup by deckgroupname
+        group.MapGet("/deckgroup/{deckgroupname}", async Task<Results<Ok<DeckGroup>, NotFound>> (string deckGroupName, ApiStudyBuddyContext db) =>
+        {
+            return await db.DeckGroups
+            .Include(x => x.DeckGroupDecks)
+            .ThenInclude(d => d.Deck)
+            .ThenInclude(d => d.DeckFlashCards)
+            .ThenInclude(d => d.FlashCard)
+            .AsNoTracking()
+                .FirstOrDefaultAsync(model => model.DeckGroupName == deckGroupName)
+                is DeckGroup model
+                    ? TypedResults.Ok(model)
+                    : TypedResults.NotFound();
+        })
+       .WithName("GetDeckGroupByDeckGroupName")
+       .WithOpenApi();
+
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, DeckGroup deckGroup, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroups
