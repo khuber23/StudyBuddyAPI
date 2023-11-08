@@ -43,6 +43,7 @@ public static class FlashCardEndpoints
                     .SetProperty(m => m.FlashCardAnswer, flashCard.FlashCardAnswer)
                     .SetProperty(m => m.FlashCardAnswerImage, flashCard.FlashCardAnswerImage)
                     .SetProperty(m => m.IsPublic, flashCard.IsPublic)
+                    .SetProperty(m => m.ReadOnly, flashCard.ReadOnly)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

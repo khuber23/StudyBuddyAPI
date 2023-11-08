@@ -13,6 +13,8 @@
 
 		public bool IsPublic { get; set; }
 
+		public bool ReadOnly { get; set; }
+
 		public List<StudySessionFlashCard>? StudySessionFlashCards { get; set; }
 
         public List<DeckFlashCard>? DeckFlashCards { get; set; }

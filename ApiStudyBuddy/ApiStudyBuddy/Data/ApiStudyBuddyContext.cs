@@ -165,21 +165,21 @@ namespace ApiStudyBuddy.Data
                 });
 
             modelBuilder.Entity<Deck>().HasData(
-                new Deck { DeckId = 1, DeckName = "Creational Design Patterns", DeckDescription = "Design patterns all about class instantiation" },
-                new Deck { DeckId = 2, DeckName = "Structural Design Patterns", DeckDescription = "Design patterns all about class and Object composition" },
-                new Deck { DeckId = 3, DeckName = "Behavorial Design Patterns", DeckDescription = "Design patterns all about Class's objects communication" }
+                new Deck { DeckId = 1, DeckName = "Creational Design Patterns", DeckDescription = "Design patterns all about class instantiation", IsPublic = false, ReadOnly = false },
+                new Deck { DeckId = 2, DeckName = "Structural Design Patterns", DeckDescription = "Design patterns all about class and Object composition", IsPublic = false, ReadOnly = false },
+                new Deck { DeckId = 3, DeckName = "Behavorial Design Patterns", DeckDescription = "Design patterns all about Class's objects communication", IsPublic = false, ReadOnly = false }
                 );
 
             modelBuilder.Entity<DeckGroup>().HasData(
-                new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "Solutions to commonly occurring problems in software design." }
+                new DeckGroup { DeckGroupId = 1, DeckGroupName = "Design Patterns", DeckGroupDescription = "Solutions to commonly occurring problems in software design.", IsPublic = false, ReadOnly = false }
                 );
 
             modelBuilder.Entity<FlashCard>().HasData(
-                new FlashCard { FlashCardId = 1, FlashCardQuestion = "What is abstract factory", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, FlashCardAnswer = "Creates an instance of several families of classes" },
-                new FlashCard { FlashCardId = 2, FlashCardQuestion = "What is Singleton?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, FlashCardAnswer = "A class of which only a single instance can exist" },
-                new FlashCard { FlashCardId = 3, FlashCardQuestion = "What is decorator?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, FlashCardAnswer = "Add responsibilites to objects dynamically" },
-                new FlashCard { FlashCardId = 4, FlashCardQuestion = "What is facade?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, FlashCardAnswer = "A single class that represents an entire subsystem" },
-                new FlashCard { FlashCardId = 5, FlashCardQuestion = "What is iterator?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, FlashCardAnswer = "Sequentially access the elements of a collection" }
+                new FlashCard { FlashCardId = 1, FlashCardQuestion = "What is abstract factory", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, ReadOnly = true, FlashCardAnswer = "Creates an instance of several families of classes" },
+                new FlashCard { FlashCardId = 2, FlashCardQuestion = "What is Singleton?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, ReadOnly = true, FlashCardAnswer = "A class of which only a single instance can exist" },
+                new FlashCard { FlashCardId = 3, FlashCardQuestion = "What is decorator?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, ReadOnly = true, FlashCardAnswer = "Add responsibilites to objects dynamically" },
+                new FlashCard { FlashCardId = 4, FlashCardQuestion = "What is facade?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, ReadOnly = true, FlashCardAnswer = "A single class that represents an entire subsystem" },
+                new FlashCard { FlashCardId = 5, FlashCardQuestion = "What is iterator?", FlashCardQuestionImage = null, FlashCardAnswerImage = null, IsPublic = true, ReadOnly = true, FlashCardAnswer = "Sequentially access the elements of a collection" }
                 );
 
 

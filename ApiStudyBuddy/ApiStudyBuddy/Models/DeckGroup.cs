@@ -13,7 +13,11 @@ namespace ApiStudyBuddy.Models
 		[Display("Deck Group Description")]
 		public string? DeckGroupDescription { get; set; }
 
-		public List<StudySession>? StudySessions { get; set; }
+        public bool IsPublic { get; set; }
+
+        public bool ReadOnly { get; set; }
+
+        public List<StudySession>? StudySessions { get; set; }
 
 		public List<UserDeckGroup>? UserDeckGroups { get; set; }
 

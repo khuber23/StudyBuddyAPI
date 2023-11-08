@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiStudyBuddy.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_migration_addCompositeKeys : Migration
+    public partial class InitialCompositeWithUpdates : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,9 @@ namespace ApiStudyBuddy.Migrations
                     DeckGroupId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeckGroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeckGroupDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DeckGroupDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    ReadOnly = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +36,9 @@ namespace ApiStudyBuddy.Migrations
                     DeckId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeckName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeckDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DeckDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    ReadOnly = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,7 +55,8 @@ namespace ApiStudyBuddy.Migrations
                     FlashCardQuestionImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FlashCardAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FlashCardAnswerImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsPublic = table.Column<bool>(type: "bit", nullable: false)
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    ReadOnly = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,29 +239,29 @@ namespace ApiStudyBuddy.Migrations
 
             migrationBuilder.InsertData(
                 table: "DeckGroups",
-                columns: new[] { "DeckGroupId", "DeckGroupDescription", "DeckGroupName" },
-                values: new object[] { 1, "Solutions to commonly occurring problems in software design.", "Design Patterns" });
+                columns: new[] { "DeckGroupId", "DeckGroupDescription", "DeckGroupName", "IsPublic", "ReadOnly" },
+                values: new object[] { 1, "Solutions to commonly occurring problems in software design.", "Design Patterns", false, false });
 
             migrationBuilder.InsertData(
                 table: "Decks",
-                columns: new[] { "DeckId", "DeckDescription", "DeckName" },
+                columns: new[] { "DeckId", "DeckDescription", "DeckName", "IsPublic", "ReadOnly" },
                 values: new object[,]
                 {
-                    { 1, "Design patterns all about class instantiation", "Creational Design Patterns" },
-                    { 2, "Design patterns all about class and Object composition", "Structural Design Patterns" },
-                    { 3, "Design patterns all about Class's objects communication", "Behavorial Design Patterns" }
+                    { 1, "Design patterns all about class instantiation", "Creational Design Patterns", false, false },
+                    { 2, "Design patterns all about class and Object composition", "Structural Design Patterns", false, false },
+                    { 3, "Design patterns all about Class's objects communication", "Behavorial Design Patterns", false, false }
                 });
 
             migrationBuilder.InsertData(
                 table: "FlashCards",
-                columns: new[] { "FlashCardId", "FlashCardAnswer", "FlashCardAnswerImage", "FlashCardQuestion", "FlashCardQuestionImage", "IsPublic" },
+                columns: new[] { "FlashCardId", "FlashCardAnswer", "FlashCardAnswerImage", "FlashCardQuestion", "FlashCardQuestionImage", "IsPublic", "ReadOnly" },
                 values: new object[,]
                 {
-                    { 1, "Creates an instance of several families of classes", null, "What is abstract factory", null, true },
-                    { 2, "A class of which only a single instance can exist", null, "What is Singleton?", null, true },
-                    { 3, "Add responsibilites to objects dynamically", null, "What is decorator?", null, true },
-                    { 4, "A single class that represents an entire subsystem", null, "What is facade?", null, true },
-                    { 5, "Sequentially access the elements of a collection", null, "What is iterator?", null, true }
+                    { 1, "Creates an instance of several families of classes", null, "What is abstract factory", null, true, true },
+                    { 2, "A class of which only a single instance can exist", null, "What is Singleton?", null, true, true },
+                    { 3, "Add responsibilites to objects dynamically", null, "What is decorator?", null, true, true },
+                    { 4, "A single class that represents an entire subsystem", null, "What is facade?", null, true, true },
+                    { 5, "Sequentially access the elements of a collection", null, "What is iterator?", null, true, true }
                 });
 
             migrationBuilder.InsertData(
