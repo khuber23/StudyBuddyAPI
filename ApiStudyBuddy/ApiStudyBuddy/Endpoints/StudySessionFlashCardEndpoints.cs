@@ -103,10 +103,10 @@ public static class StudySessionFlashCardEndpoints
         .WithName("CreateStudySessionFlashCard")
         .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int studysessionid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{studysessionid}/{flashcardid}", async Task<Results<Ok, NotFound>> (int studysessionid, int flashcardid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.StudySessionsFlashCards
-                .Where(model => model.StudySessionId == studysessionid)
+                .Where(model => model.StudySessionId == studysessionid && model.FlashCardId == flashcardid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

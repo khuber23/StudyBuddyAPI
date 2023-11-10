@@ -70,10 +70,10 @@ public static class UserDeckEndpoints
         .WithName("CreateUserDeck")
         .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int userid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{userid}/{deckid}", async Task<Results<Ok, NotFound>> (int userid, int deckid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.UserDecks
-                .Where(model => model.UserId == userid)
+                .Where(model => model.UserId == userid && model.DeckId == deckid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
