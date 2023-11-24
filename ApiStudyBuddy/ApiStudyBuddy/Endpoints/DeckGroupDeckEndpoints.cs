@@ -84,10 +84,10 @@ public static class DeckGroupDeckEndpoints
         .WithName("CreateDeckGroupDeck")
         .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckgroupid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{deckgroupid}/{deckid}", async Task<Results<Ok, NotFound>> (int deckgroupid, int deckid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckGroupDecks
-                .Where(model => model.DeckGroupId == deckgroupid)
+                .Where(model => model.DeckGroupId == deckgroupid && model.DeckId == deckid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })

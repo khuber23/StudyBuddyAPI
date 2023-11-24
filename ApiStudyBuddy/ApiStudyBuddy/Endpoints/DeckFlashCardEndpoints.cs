@@ -55,10 +55,10 @@ public static class DeckFlashCardEndpoints
         .WithName("CreateDeckFlashCard")
         .WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int deckid, ApiStudyBuddyContext db) =>
+        group.MapDelete("/{deckid}/{flashcardid}", async Task<Results<Ok, NotFound>> (int deckid, int flashcardid, ApiStudyBuddyContext db) =>
         {
             var affected = await db.DeckFlashCards
-                .Where(model => model.DeckId == deckid)
+                .Where(model => model.DeckId == deckid && model.FlashCardId == flashcardid)
                 .ExecuteDeleteAsync();
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
