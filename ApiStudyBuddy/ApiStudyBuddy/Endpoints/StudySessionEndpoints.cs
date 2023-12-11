@@ -24,6 +24,15 @@ public static class StudySessionEndpoints
         .WithName("GetAllStudySessions")
         .WithOpenApi();
 
+        group.MapGet("/full/{userId}/{deckId}/{deckgroupId}", async (int userId, int deckId, string deckgroupId, ApiStudyBuddyContext db) =>
+        {
+            return await db.StudySessions.AsNoTracking()
+            .Where(model => model.UserId == userId && model.DeckId == deckId && model.DeckGroupId.ToString() == deckgroupId)
+            .ToListAsync();
+        })
+      .WithName("GetStudySessionFull")
+      .WithOpenApi();
+
         group.MapGet("/{id}", async Task<Results<Ok<StudySession>, NotFound>> (int studysessionid, ApiStudyBuddyContext db) =>
         {
             return await db.StudySessions.AsNoTracking()
